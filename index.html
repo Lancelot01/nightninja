@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>忍者之夜 Night of Ninja v2.4</title>
+<style>
+:root{--bg:#14110f;--panel:#211a18;--panel2:#2f2520;--gold:#d9a441;--red:#b93d35;--blue:#3f75b5;--green:#4fa36b;--muted:#b8a99a;--text:#f3e6d3;--dead:#555;--card:#eee1ca;}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#302019,#110d0c 60%);color:var(--text);font-family:'Microsoft JhengHei',Arial,sans-serif;min-height:100vh;}
+button,select,input{font-family:inherit} button{border:0;border-radius:10px;padding:10px 16px;background:linear-gradient(#e0b456,#b77a28);color:#1b1007;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #714616;} button:hover{filter:brightness(1.08)} button.secondary{background:#3b302a;color:var(--text);box-shadow:0 3px 0 #16100e;border:1px solid #6b5448} button.danger{background:linear-gradient(#d04a42,#8f231d);color:#fff;box-shadow:0 3px 0 #4a120e} button.good{background:linear-gradient(#5fc07d,#317d4c);color:#fff;box-shadow:0 3px 0 #1f4b30} button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+.hidden{display:none!important}.wrap{max-width:1900px;margin:0 auto;padding:12px}.humanText{color:#39ff14;text-shadow:0 0 10px #39ff14,0 0 22px rgba(57,255,20,.65)}.topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}.title{font-size:28px;font-weight:900;color:var(--gold);letter-spacing:2px}.sub{color:var(--muted);font-size:14px}.layout{display:grid;grid-template-columns:1fr;gap:14px}.panel{background:rgba(33,26,24,.92);border:1px solid #5a463b;border-radius:16px;padding:14px;box-shadow:0 0 24px rgba(0,0,0,.35)}.hostScreen{height:210px;min-height:210px;max-height:210px;position:sticky;top:8px;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,rgba(76,43,26,.98),rgba(27,19,17,.98));border:2px solid #8d6c42;overflow:hidden}.humanResultBanner{position:absolute;left:18px;right:18px;bottom:8px;background:linear-gradient(180deg,rgba(8,32,16,.98),rgba(4,18,8,.98));border:2px solid #39ff14;border-radius:14px;padding:8px 12px;color:#caffc9;font-weight:900;box-shadow:0 0 22px rgba(57,255,20,.45);text-align:left;z-index:4}.humanResultBanner .hrTitle{color:#39ff14;text-shadow:0 0 10px #39ff14;font-size:16px;margin-bottom:2px}.humanResultBanner .hrBody{font-size:17px;line-height:1.35}.humanResultBanner b{color:#fff2a8}.bigPhase{font-size:54px;font-weight:1000;color:#ffe2a1;text-shadow:0 0 18px rgba(217,164,65,.35);line-height:1.1;min-height:60px;display:flex;align-items:center;justify-content:center}.hostNote{font-size:18px;color:#e8d4b5;margin-top:10px;min-height:48px;max-height:48px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}.timer{font-size:22px;margin-top:8px;color:#9fd1ff;min-height:28px}.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.player{background:linear-gradient(180deg,#2b211d,#1b1513);border:1px solid #604b40;border-radius:14px;padding:10px;position:relative;min-height:168px}.player.actionUser{border:3px solid #6fd8ff!important;box-shadow:0 0 22px rgba(111,216,255,.75),inset 0 0 18px rgba(111,216,255,.14)}.player.actionTarget{border:3px solid #ffd35a!important;box-shadow:0 0 24px rgba(255,211,90,.85),inset 0 0 18px rgba(255,211,90,.16)}.player.actionUser::before{content:'使用者';position:absolute;top:-12px;right:12px;background:#6fd8ff;color:#06151c;border-radius:999px;padding:3px 10px;font-weight:1000;font-size:13px;box-shadow:0 0 12px rgba(111,216,255,.9);z-index:2}.player.actionTarget::after{content:'被目標';position:absolute;top:18px;right:12px;background:#ffd35a;color:#211300;border-radius:999px;padding:3px 10px;font-weight:1000;font-size:13px;box-shadow:0 0 12px rgba(255,211,90,.95);z-index:2}.player.human{border:2px solid #39ff14;box-shadow:0 0 18px rgba(57,255,20,.28)}.player.human .pname{color:#39ff14;text-shadow:0 0 10px #39ff14,0 0 22px rgba(57,255,20,.65)}.knownBox{margin-top:8px;background:#101611;border:1px solid rgba(57,255,20,.35);border-radius:10px;padding:7px;font-size:12px;color:#bfffc0;line-height:1.45;max-height:90px;overflow:auto}.player.dead{filter:grayscale(.75);opacity:.75;border-color:#555}.pname{font-weight:900;font-size:18px}.badge{display:inline-block;border-radius:999px;padding:3px 8px;font-size:12px;margin-left:5px;background:#43352c;color:#eee}.deadTag{background:#5b1111;color:#ffd1d1}.aliveTag{background:#164a2d;color:#d7ffe4}.score{font-size:13px;color:#d6c2aa;margin-top:4px}.roleFace{margin-top:8px;border-radius:10px;padding:8px;background:#181210;border:1px dashed #756153;min-height:42px}.lotus{color:#ff9fab}.crane{color:#9dccff}.ronin{color:#e5d565}.cards{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.miniCard{background:#efe1c7;color:#2c1a12;border-radius:8px;padding:6px 7px;font-size:12px;border:2px solid #8e7654;min-width:62px;text-align:center;font-weight:800}.miniCard.used{background:#a68f74;color:#3a2a20;text-decoration:line-through}.miniCard.faceDown{background:#342822;color:#8d7a6c;border-color:#554235}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.log{height:640px;overflow:auto;background:#120e0d;border-radius:12px;border:1px solid #4e3d35;padding:10px;font-size:14px;line-height:1.55}.logEntry{border-bottom:1px solid #352821;padding:7px 2px}.logEntry:last-child{border-bottom:0}.privateBox{background:#15110f;border:1px solid #624b3e;border-radius:12px;padding:12px;margin-top:12px}.draftGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.cardPick{background:linear-gradient(180deg,#f5e7c9,#d8bc83);color:#23150f;border:3px solid #806649;border-radius:14px;padding:12px;text-align:center;min-height:190px;cursor:pointer;position:relative;overflow:hidden}.cardPick:hover{border-color:var(--gold);transform:translateY(-1px)}.cardPick.selected{border-color:#30b66a;box-shadow:0 0 18px rgba(48,182,106,.35)}.cardType{font-weight:1000;font-size:20px}.cardNum{font-size:34px;font-weight:1000}.cardArt{font-size:44px;line-height:1;margin:8px auto 6px;width:78px;height:58px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(255,255,255,.35);border:1px solid rgba(80,50,24,.25)}.cardEffect{font-size:13px;line-height:1.35;color:#442a17;margin-top:6px}.roleCardBig{border-radius:14px;border:2px solid #806649;background:linear-gradient(180deg,#f4e3bd,#cda96b);color:#23150f;padding:12px;margin:8px 0;max-width:300px}.roleIcon{font-size:48px}.privateCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px}.small{font-size:12px;color:var(--muted)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:50}.modalCard{background:#211a18;border:2px solid var(--gold);border-radius:18px;padding:18px;max-width:980px;width:94%;box-shadow:0 0 60px rgba(0,0,0,.75)}.modalTitle{font-size:28px;font-weight:1000;color:var(--gold);margin-bottom:10px}.targetList{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.targetBtn{background:#332923;color:var(--text);box-shadow:none;border:1px solid #6a5244}.targetBtn.selectedTarget{background:linear-gradient(180deg,#3fb7ff,#1674a8)!important;color:#06151c!important;border:3px solid #7fe4ff!important;box-shadow:0 0 20px rgba(111,216,255,.9)!important;font-weight:1000;transform:translateY(-2px)}.targetBtn.killTarget{border-color:#d04a42;color:#ffd7d5}.targetBtn.deadOption{opacity:.45;filter:grayscale(.8);cursor:not-allowed}.resultBox{background:#100c0b;border:1px solid #5f4b41;border-radius:10px;padding:10px;margin-top:10px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.phaseList{display:flex;gap:6px;flex-wrap:wrap}.phasePill{padding:5px 8px;border-radius:999px;background:#322822;color:#bfae9c;font-size:12px}.phasePill.active{background:#6f451d;color:#ffe6b1}.setupGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:16px 0}.setupBtn{font-size:22px;padding:20px}.footerNote{margin-top:12px;color:#bba997;font-size:13px}.honorToken{display:inline-block;background:#251c18;border:1px solid #8b704e;border-radius:999px;padding:4px 9px;margin:2px;color:#ffd98d}.winner{font-size:30px;color:#8cffaa;font-weight:1000}.warn{color:#ffb2ad}.ok{color:#9cffbd}.info{color:#9dccff}.actionPopup{position:fixed;left:50%;top:76px;transform:translateX(-50%);z-index:80;min-width:520px;max-width:900px;background:linear-gradient(180deg,#1b2a35,#0d151b);border:3px solid #6fd8ff;border-radius:18px;padding:16px 22px;box-shadow:0 0 45px rgba(111,216,255,.65),0 0 80px rgba(0,0,0,.8);text-align:center;animation:popIn .16s ease-out}.actionPopup .apTitle{font-size:30px;font-weight:1000;color:#dff7ff;text-shadow:0 0 16px rgba(111,216,255,.9)}.actionPopup .apSub{font-size:19px;margin-top:8px;color:#ffe8a8}.actionPopup .apTarget{display:inline-block;margin-top:8px;padding:5px 13px;border-radius:999px;background:#ffd35a;color:#241500;font-weight:1000;box-shadow:0 0 16px rgba(255,211,90,.8)}.actionPopup.tricksterPopup{top:118px;min-width:680px;background:linear-gradient(180deg,#311845,#100817);border-color:#d58cff;box-shadow:0 0 55px rgba(213,140,255,.75),0 0 90px rgba(0,0,0,.88)}.actionPopup.tricksterPopup .apTitle{color:#f4ddff;text-shadow:0 0 18px rgba(213,140,255,.95);font-size:34px}.actionPopup.tricksterPopup .apSub{font-size:22px;line-height:1.45}@keyframes popIn{from{opacity:0;transform:translateX(-50%) scale(.92)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+.player .fxBadge{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);font-size:56px;z-index:20;pointer-events:none;text-shadow:0 0 18px rgba(255,255,255,.95),0 0 34px rgba(111,216,255,.75);animation:fxPop 1.9s ease-out forwards}.player .fxBadge.eye{color:#9fdcff}.player .fxBadge.slash{color:#ff5252;text-shadow:0 0 18px #ff5252,0 0 36px rgba(255,0,0,.9);animation:fxSlash .9s ease-out forwards}.player .fxBadge.shield{color:#bde8ff;text-shadow:0 0 20px #7ddcff,0 0 38px rgba(80,180,255,.95);animation:fxShield 1.8s ease-out forwards}.player .fxBadge.holy{color:#fff1a8;text-shadow:0 0 20px #fff,0 0 42px rgba(255,224,120,.95);animation:fxHoly 2.2s ease-out forwards}.player .fxBadge.clown{color:#e9b4ff;text-shadow:0 0 18px #d58cff,0 0 38px rgba(213,140,255,.95);animation:fxClown 2.2s ease-out forwards}.player .fxBadge.crown{color:#ffe28a;text-shadow:0 0 22px #ffd35a,0 0 44px rgba(255,211,90,.95);animation:fxCrown 2.2s ease-out forwards}.player .fxText{position:absolute;left:50%;top:72%;transform:translateX(-50%);z-index:21;background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:4px 12px;font-weight:1000;color:#fff;white-space:nowrap;pointer-events:none;animation:fxText 2s ease-out forwards}@keyframes fxPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}70%{opacity:1;transform:translate(-50%,-68%) scale(1)}100%{opacity:0;transform:translate(-50%,-95%) scale(.85)}}@keyframes fxSlash{0%{opacity:0;transform:translate(-110%,-60%) rotate(-25deg) scale(.45)}30%{opacity:1;transform:translate(-35%,-45%) rotate(-12deg) scale(1.25)}75%{opacity:1;transform:translate(0%,-50%) rotate(8deg) scale(1.05)}100%{opacity:0;transform:translate(42%,-50%) rotate(18deg) scale(.9)}}@keyframes fxShield{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}55%{filter:brightness(1.8);transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55)}}@keyframes fxHoly{0%{opacity:0;transform:translate(-50%,-95%) scale(.7)}20%{opacity:1;transform:translate(-50%,-55%) scale(1.1)}65%{opacity:1;filter:brightness(1.9)}100%{opacity:0;transform:translate(-50%,-20%) scale(1.4)}}@keyframes fxClown{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-8deg)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(8deg)}55%{transform:translate(-50%,-50%) scale(1.05) rotate(-6deg)}100%{opacity:0;transform:translate(-50%,-70%) scale(.9) rotate(0deg)}}@keyframes fxCrown{0%{opacity:0;transform:translate(-50%,-85%) scale(.5)}25%{opacity:1;transform:translate(-50%,-65%) scale(1.25)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-105%) scale(.9)}}@keyframes fxText{0%{opacity:0;transform:translateX(-50%) translateY(10px)}20%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-15px)}}.slashLine{position:fixed;z-index:100;pointer-events:none;font-size:58px;color:#ff4b4b;text-shadow:0 0 18px #ff4b4b,0 0 34px rgba(255,0,0,.8);animation:lineSlash 900ms ease-out forwards}@keyframes lineSlash{0%{opacity:0;transform:translate(-50%,-50%) rotate(-25deg) scale(.4)}25%{opacity:1;transform:translate(-50%,-50%) rotate(-15deg) scale(1.25)}100%{opacity:0;transform:translate(-50%,-50%) rotate(20deg) scale(.8)}}
+.speech{margin-top:7px;background:rgba(90,70,35,.38);border:1px solid rgba(255,215,120,.55);border-radius:10px;padding:7px;font-size:13px;color:#ffe9b3;line-height:1.35}.speech::before{content:'💬 ';}.talkHistory{max-height:150px;overflow:auto;background:#100d0c;border:1px solid #4f4038;border-radius:10px;padding:8px;margin-top:8px}.talkItem{padding:5px 0;border-bottom:1px solid #30241f;font-size:13px}.talkItem:last-child{border-bottom:0}.talkChoiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.claimBadge{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#233a25;color:#afffb8;border:1px solid rgba(57,255,20,.35);font-size:12px}
+.markBadge{display:inline-block;margin:2px 3px 0 0;padding:2px 7px;border-radius:999px;background:#172433;color:#bde0ff;border:1px solid rgba(120,190,255,.5);font-size:12px}
+.debugBox{position:fixed;right:14px;bottom:14px;z-index:90;background:rgba(10,10,10,.82);border:1px solid rgba(111,216,255,.45);color:#bfeaff;border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.45;max-width:330px}.forceBtn{position:fixed;right:14px;bottom:92px;z-index:91;background:#2a4050!important;color:#dff7ff!important;box-shadow:0 3px 0 #10202a!important;border:1px solid #6fd8ff!important}
+.pauseBanner{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:120;background:rgba(10,20,14,.95);border:2px solid #39ff14;color:#bfffc0;border-radius:999px;padding:8px 18px;font-weight:1000;box-shadow:0 0 24px rgba(57,255,20,.55)}.talkModal .modalCard{border-color:#39ff14;box-shadow:0 0 52px rgba(57,255,20,.28)}.talkSection{background:#15110f;border:1px solid #564137;border-radius:12px;padding:10px;margin-top:10px}.selectLine{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}.selectLine select{background:#0f0c0b;color:#ffe6bd;border:1px solid #6b5448;border-radius:8px;padding:7px}.aiPersonality{display:inline-block;margin-left:5px;border-radius:999px;padding:2px 7px;font-size:11px;background:#1c2732;color:#abd7ff;border:1px solid rgba(157,204,255,.35)}
+.talkBuilder{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin-top:10px}.talkBuilder label{color:#d7c2a9;font-size:13px}.talkBuilder select{width:100%;background:#0f0c0b;color:#ffe6bd;border:1px solid #6b5448;border-radius:8px;padding:8px}.talkPreview{background:#0b1510;border:1px solid rgba(57,255,20,.45);color:#c7ffc7;border-radius:10px;padding:10px;margin-top:10px;font-weight:800}.quickTalkGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.freeTalkBox{width:100%;min-height:86px;background:#0f0c0b;color:#dfffdc;border:1px solid rgba(57,255,20,.55);border-radius:10px;padding:10px;font-size:16px;resize:vertical;outline:none}.freeTalkHint{font-size:12px;color:#bfffc0;line-height:1.5;margin-top:6px}.parseResult{background:#101914;border:1px solid rgba(57,255,20,.35);border-radius:10px;padding:8px;margin-top:8px;color:#c9ffc9;font-size:13px;line-height:1.45}
+@media(max-width:900px){.talkBuilder{grid-template-columns:1fr}.quickTalkGrid{grid-template-columns:1fr}}
+
+@media(max-width:980px){.layout{grid-template-columns:1fr}.players{grid-template-columns:repeat(2,1fr)}.bigPhase{font-size:40px}.log{height:340px}.targetList,.draftGrid,.setupGrid{grid-template-columns:repeat(2,1fr)}}
+
+.compactPrivate{max-height:245px;overflow:auto;padding:10px!important}
+.compactPrivate h3{margin:0 0 6px;font-size:18px}
+.compactPrivate .privateCards{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}
+.compactPrivate .roleCardBig{display:inline-block;vertical-align:top;margin:4px 8px 4px 0;max-width:210px;padding:8px}
+.compactPrivate .cardPick{min-height:118px;padding:8px}
+.compactPrivate .cardArt{font-size:30px;width:54px;height:38px;margin:4px auto}
+.compactPrivate .cardType{font-size:16px}.compactPrivate .cardNum{font-size:24px}.compactPrivate .cardEffect{font-size:11px}
+.compactPrivate .knownBox{max-height:92px!important}.compactPrivate .talkHistory{max-height:92px!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div><div class="title">忍者之夜 Night of Ninja v2.4</div><div class="sub">4～11人｜自由打字判斷＋AI可讀懂發言＋獨立100局記憶庫｜1920×1080優化｜AI獨立視野</div></div>
+    <div class="row"><label class="small">AI反應速度 <input id="aiSpeed" type="range" min="0.5" max="3" step="0.1" value="1.0" oninput="setAISpeed(this.value)"> <span id="aiSpeedLabel">1.0秒</span></label><label class="small">AI發言密度 <input id="aiTalk" type="range" min="0.5" max="2.5" step="0.1" value="1.6" oninput="setAITalkRate(this.value)"> <span id="aiTalkLabel">1.6倍</span></label><button id="pauseToggleBtnTop" class="secondary" onclick="togglePause()">⏸ 暫停</button><button class="secondary" onclick="resetGame()">重新開始</button></div>
+  </div>
+
+  <section id="setup" class="panel">
+    <h2>選擇玩家人數</h2>
+    <div class="setupGrid">
+      <button class="setupBtn" onclick="startGame(4)">4 人局</button>
+      <button class="setupBtn" onclick="startGame(5)">5 人局</button>
+      <button class="setupBtn" onclick="startGame(6)">6 人局</button>
+      <button class="setupBtn" onclick="startGame(7)">7 人局</button>
+      <button class="setupBtn" onclick="startGame(8)">8 人局</button>
+      <button class="setupBtn" onclick="startGame(9)">9 人局</button>
+      <button class="setupBtn" onclick="startGame(10)">10 人局</button>
+      <button class="setupBtn" onclick="startGame(11)">11 人局</button>
+    </div>
+    <div class="footerNote">1名玩家隨機進入座位，其餘為簡易AI。AI反應速度可調0.5～3秒；主持人AI只負責流程，不互通AI私人資訊。</div>
+  </section>
+
+  <section id="game" class="hidden">
+    <div class="layout">
+      <div>
+        <div class="panel hostScreen">
+          <div id="bigPhase" class="bigPhase">準備中</div>
+          <div id="hostNote" class="hostNote">主持人AI等待指令</div>
+          <div id="timer" class="timer"></div>
+          <div class="controls" id="hostControls"></div>
+          <div id="humanResultBanner" class="humanResultBanner hidden"></div>
+        </div>
+        <div class="panel">
+          <div class="row" style="justify-content:space-between">
+            <h3 style="margin:0">玩家區</h3>
+            <div class="row"><button id="pauseToggleBtnPanel" class="secondary" onclick="togglePause()">⏸ 暫停</button><button class="secondary" onclick="openTalkModal()">💬 對話框</button><div id="roundInfo" class="small"></div></div>
+          </div>
+          <div id="players" class="players"></div>
+        </div>
+        <div id="privatePanel" class="panel privateBox compactPrivate hidden"></div>
+      </div>
+      <div id="logPanel" class="panel hidden">
+        <h3 style="margin-top:0">主持人公布欄</h3>
+        <div class="phaseList" id="phaseList"></div>
+        <div id="log" class="log"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="modal" class="modal hidden"><div class="modalCard" id="modalCard"></div></div>
+<div id="actionPopup" class="actionPopup hidden"></div>
+<div id="pauseBanner" class="pauseBanner hidden">⏸ 遊戲已暫停</div>
+<button id="forceBtn" class="forceBtn hidden" onclick="forceNext('手動強制下一步')">⏭ 強制下一步</button>
+<div id="debugBox" class="debugBox hidden">除錯資訊</div>
+
+<script>
+const TYPES = ['密探','隱士','騙徒','盲眼刺客','上忍'];
+const tricksterNames = {1:'百變者',2:'掘墓人',3:'搗蛋鬼',4:'靈魂商販',5:'竊賊',6:'裁判'};
+const honorBase = [...Array(14).fill(2),...Array(14).fill(3),4,4];
+const AI_NAMES = ['影丸','疾風','朧月','雪鴉','夜叉','蒼牙','紅蓮','白狐','玄武','飛燕'];
+const AI_PERSONAS = ['保守型','分析型','激進型','狡猾型'];
+function basePersonaRate(p){ return ({'保守型':0.26,'分析型':0.72,'激進型':0.92,'狡猾型':0.82}[p.persona]||0.55); }
+function personaRate(p){ const talk=(G&&G.aiTalkRate)||DEFAULT_AI_TALK_RATE; return Math.max(0.08, Math.min(0.98, basePersonaRate(p)*talk)); }
+const AI_DB_LIMIT = 100;
+function ensureAIDB(p){
+  if(!p)return null;
+  if(!p.aiDB)p.aiDB={rounds:[],trust:{},lies:0,trueTalk:0};
+  return p.aiDB;
+}
+function ensureMemory(p){
+  if(!p.memory)p.memory={roles:{},cards:{},claims:[]};
+  if(!p.memory.roles)p.memory.roles={};
+  if(!p.memory.cards)p.memory.cards={};
+  if(!p.memory.claims)p.memory.claims=[];
+  return p.memory;
+}
+function aiDBCount(p){ return p&&p.aiDB&&p.aiDB.rounds ? p.aiDB.rounds.length : 0; }
+let G = null;
+let DEFAULT_AI_SPEED = 1.0;
+let DEFAULT_AI_TALK_RATE = 1.6;
+let FLOW_WATCHDOG = null;
+function markProgress(reason=''){ if(G){ G.lastProgressAt=Date.now(); G.lastProgressReason=reason; } updateDebugBox(); }
+function currentHolderNames(){ try{return holdersForCurrent().map(p=>p.name).join('、')||'無';}catch(e){return '無';} }
+function updateDebugBox(){ const box=document.getElementById('debugBox'); const btn=document.getElementById('forceBtn'); if(!box||!btn)return; if(!G){box.classList.add('hidden');btn.classList.add('hidden');return;} box.classList.remove('hidden');btn.classList.remove('hidden'); const age=G.lastProgressAt?((Date.now()-G.lastProgressAt)/1000).toFixed(1):'0.0'; const a=G.currentAnnounce?announceCardLabel(G.currentAnnounce):'無'; box.innerHTML=`階段：${G.stage||'無'}<br>宣告：${a}<br>持有者：${currentHolderNames()}<br>最近流程：${G.lastProgressReason||'初始化'}｜${age}s`; }
+function startFlowWatchdog(){ if(FLOW_WATCHDOG)clearInterval(FLOW_WATCHDOG); FLOW_WATCHDOG=setInterval(()=>{ if(!G||G.paused)return; updateDebugBox(); if(G.stage==='action'&&G.currentAnnounce&&G.lastProgressAt){ const age=Date.now()-G.lastProgressAt; const note=(document.getElementById('hostNote')?.textContent||''); const modalOpen=!document.getElementById('modal')?.classList.contains('hidden'); const holders=holdersForCurrent(); const onlyAI=holders.length&&holders.every(p=>p.isAI); if(age>9000 && (onlyAI || /正在判斷|反制判斷|等待持有者/.test(note))){ forceNext('全域防卡保險絲'); } } },1000); }
+function forceNext(reason='強制下一步'){ if(!G)return; try{ clearAISafety(); if(G.timerId){clearInterval(G.timerId);G.timerId=null;} closeModal(); clearActionMarkers(); log(`⚠ ${reason}：主持人跳過目前宣告，繼續流程。`,'warn'); markProgress(reason); nextAnnounce(); }catch(e){ console.error(e); try{ G.stage='action'; G.currentAnnounce=null; nextAnnounce(); }catch(err){console.error(err);} } }
+function setAITalkRate(v){ DEFAULT_AI_TALK_RATE = Math.max(0.5, Math.min(2.5, parseFloat(v)||1.6)); if(G)G.aiTalkRate=DEFAULT_AI_TALK_RATE; const lab=document.getElementById('aiTalkLabel'); if(lab)lab.textContent=DEFAULT_AI_TALK_RATE.toFixed(1)+'倍'; }
+function setAISpeed(v){ DEFAULT_AI_SPEED = Math.max(0.5, Math.min(3, parseFloat(v)||1.0)); if(G)G.aiSpeed=DEFAULT_AI_SPEED; const lab=document.getElementById('aiSpeedLabel'); if(lab)lab.textContent=DEFAULT_AI_SPEED.toFixed(1)+'秒'; }
+function aiDelay(scale=1){ return Math.round(((G&&G.aiSpeed)||DEFAULT_AI_SPEED)*1000*scale); }
+function isGamePaused(){ return !!(G&&G.paused); }
+function updatePauseUI(){
+  const paused=!!(G&&G.paused);
+  const banner=document.getElementById('pauseBanner');
+  if(banner){ banner.classList.toggle('hidden', !paused); banner.textContent = paused ? `⏸ ${G&&G.pauseReason?G.pauseReason:'遊戲已暫停'}` : ''; }
+  for(const id of ['pauseToggleBtnTop','pauseToggleBtnPanel','pauseToggleBtnTalk']){
+    const b=document.getElementById(id); if(b) b.textContent = paused ? '▶ 繼續' : '⏸ 暫停';
+  }
+}
+function setGamePaused(paused, reason='遊戲已暫停'){
+  if(!G)return;
+  G.paused=!!paused;
+  G.pauseReason=paused?reason:'';
+  updatePauseUI();
+  if(!paused) flushPausedCallbacks();
+}
+function togglePause(){ if(!G)return; setGamePaused(!G.paused, '玩家手動暫停'); }
+function pauseFromTalk(){ setGamePaused(true, '聊天欄暫停'); }
+function resumeFromTalk(){ setGamePaused(false); }
+function gameTimeout(fn, ms){
+  return window.setTimeout(()=>{
+    if(isGamePaused()){
+      if(G){ (G.pausedCallbacks||(G.pausedCallbacks=[])).push(fn); }
+      return;
+    }
+    fn&&fn();
+  }, ms);
+}
+function flushPausedCallbacks(){
+  if(!G)return;
+  const q=(G.pausedCallbacks||[]).splice(0);
+  if(q.length) gameTimeout(()=>{ q.forEach(fn=>{ try{ fn&&fn(); }catch(e){ console.error(e); } }); },80);
+}
+
+let aiSafetyTimer=null;
+function startAISafety(label='AI判斷'){
+  if(aiSafetyTimer) clearTimeout(aiSafetyTimer);
+  aiSafetyTimer = window.setTimeout(()=>{
+    aiSafetyTimer=null;
+    if(!G || G.stage!=='action' || !G.currentAnnounce) return;
+    console.warn('AI safety skip:', label);
+    log(`⚠ ${label} 超時，主持人自動跳過，避免遊戲卡住。`,'warn');
+    try{ forceNext(label+' 超時'); }catch(e){ console.error(e); }
+  }, Math.max(3200, Math.min(6500, aiDelay(2.6))));
+}
+function clearAISafety(){ if(aiSafetyTimer){ clearTimeout(aiSafetyTimer); aiSafetyTimer=null; } }
+
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cardName(c){ if(!c)return '無'; if(c.type==='騙徒')return `騙徒${c.num}・${tricksterNames[c.num]}`; if(c.type==='首腦'||c.type==='還施僧'||c.type==='殉道者')return c.type; return `${c.type}${c.num}`; }
+function cardArt(c){
+  if(!c)return '？';
+  if(c.type==='密探')return '🕵️';
+  if(c.type==='隱士')return '🧙';
+  if(c.type==='盲眼刺客')return '🗡️';
+  if(c.type==='上忍')return '🥷';
+  if(c.type==='殉道者')return '🕯️';
+  if(c.type==='還施僧')return '🪞';
+  if(c.type==='首腦')return '👑';
+  if(c.type==='騙徒')return {1:'🎭',2:'⚰️',3:'🃏',4:'💰',5:'🪙',6:'⚖️'}[c.num]||'🎭';
+  return '🎴';
+}
+function cardEffect(c){
+  if(!c)return '';
+  if(c.type==='密探')return '查看一位玩家的流派牌。';
+  if(c.type==='隱士')return '查看一位玩家的流派牌，並查看其一張忍者牌。';
+  if(c.type==='盲眼刺客')return '選擇一位玩家擊殺，不先查看流派。';
+  if(c.type==='上忍')return '先查看一位玩家流派牌，之後可選擇是否擊殺。';
+  if(c.type==='殉道者')return '被上忍或盲眼刺客擊殺時，可死亡並抽一枚榮譽。';
+  if(c.type==='還施僧')return '被上忍或盲眼刺客擊殺時，可反殺攻擊者並存活。';
+  if(c.type==='首腦')return '揭示階段若你仍存活，你的流派直接獲勝；浪人則獨勝。';
+  if(c.type==='騙徒'){
+    return {
+      1:'百變者：查看兩位玩家流派，可選擇交換。',
+      2:'掘墓人：查看棄牌，選一張加入手牌，或立刻打出。',
+      3:'搗蛋鬼：查看一位玩家流派，可公開揭示。',
+      4:'靈魂商販：查看流派或榮譽，榮譽互動。',
+      5:'竊賊：公開自己流派，偷取一枚榮譽。',
+      6:'裁判：公開自己流派，並擊殺一位玩家。'
+    }[c.num]||'';
+  }
+  return '';
+}
+function cardHTML(c,i=null,extra=''){
+  const click = i===null ? '' : ` onclick="pickCard(${i})"`;
+  return `<div class="cardPick"${click}>
+    <div class="cardType">${c.type==='騙徒'?tricksterNames[c.num]:c.type}</div>
+    <div class="cardArt">${cardArt(c)}</div>
+    <div class="cardNum">${c.num||''}</div>
+    <div><b>${cardName(c)}</b></div>
+    <div class="cardEffect">${cardEffect(c)}</div>${extra}
+  </div>`;
+}
+function roleEffect(r){
+  if(r.faction==='浪人')return '目的：只要揭示階段仍存活，就可抽取榮譽。若持有首腦且存活，成為唯一勝利者。';
+  return `目的：保護${r.faction}派低數字同伴，揭示階段以存活者最小數字較小者獲勝。`;
+}
+function roleIcon(r){ if(r.faction==='蓮花')return '🌸'; if(r.faction==='仙鶴')return '🪽'; return '🌙'; }
+function roleCardHTML(r){ return `<div class="roleCardBig"><div class="roleIcon">${roleIcon(r)}</div><div style="font-size:24px;font-weight:1000" class="${roleClass(r)}">${roleName(r)}</div><div class="cardEffect">${roleEffect(r)}</div></div>`; }
+function addInfo(p,msg){ if(!p.infoLog)p.infoLog=[]; p.infoLog.unshift(msg); p.infoLog=p.infoLog.slice(0,12); }
+function rememberRole(viewer,target){ ensureMemory(viewer); viewer.memory.roles[target.id]=target.role; addInfo(viewer,`看見 ${target.name} 的流派：${roleName(target.role)}`); }
+function rememberCard(viewer,target,card){ ensureMemory(viewer); viewer.memory.cards[target.id]=card; addInfo(viewer,`看見 ${target.name} 的忍者牌：${cardName(card)}`); }
+function publicRevealToAll(target){ for(const p of G.players){ ensureMemory(p); p.memory.roles[target.id]=target.role; addInfo(p,`公開情報：${target.name} 是 ${roleName(target.role)}`); } }
+
+function roleName(r){ if(!r)return '？'; if(r.faction==='浪人')return '浪人'; return `${r.faction}${r.num}`; }
+function roleClass(r){ if(!r)return ''; if(r.faction==='蓮花')return 'lotus'; if(r.faction==='仙鶴')return 'crane'; return 'ronin'; }
+function log(msg, cls=''){ updateDebugBox(); const box=document.getElementById('log'); if(!box)return; const d=document.createElement('div'); d.className='logEntry '+cls; d.innerHTML=msg; box.prepend(d); }
+function setHost(title,note='',controls=''){ document.getElementById('bigPhase').textContent=title; document.getElementById('hostNote').innerHTML=note; document.getElementById('hostControls').innerHTML=controls; document.getElementById('timer').textContent=''; }
+
+function announceCardLabel(a){ const c={type:a.type,num:a.num}; return cardName(c); }
+function announceCardEffect(a){ const c={type:a.type,num:a.num}; return cardEffect(c); }
+function showActionPopup(actor, cardOrText, target=null, verb='發動效果', duration=null, specialClass=''){
+  const box=document.getElementById('actionPopup'); if(!box)return;
+  const actorName=typeof actor==='string'?actor:(actor&&actor.name)||'未知玩家';
+  const cardText=typeof cardOrText==='string'?cardOrText:cardName(cardOrText);
+  const targetText=Array.isArray(target)?target.filter(Boolean).map(x=>typeof x==='string'?x:x.name).join('、'):(target?(typeof target==='string'?target:target.name):'');
+  box.className='actionPopup hidden';
+  if(specialClass)box.classList.add(specialClass);
+  box.innerHTML=`<div class="apTitle">${actorName} 使用 ${cardText}</div><div class="apSub">${verb}${targetText?`<br><span class="apTarget">被目標：${targetText}</span>`:''}</div>`;
+  box.classList.remove('hidden');
+  clearTimeout(window._actionPopupTimer);
+  const ms = duration || Math.max(1200, Math.min(2400, aiDelay?aiDelay(.8):1400));
+  window._actionPopupTimer=gameTimeout(()=>{box.classList.add('hidden'); box.classList.remove('tricksterPopup');}, ms);
+}
+function showTricksterPopup(actor, card, target=null, verb='騙徒能力發動'){
+  showActionPopup(actor, card, target, verb, 3500, 'tricksterPopup');
+  showClownEffect(actor,target, card&&card.num===1?'可能交換了':'騙徒能力');
+}
+
+function playerEl(x){ const id=typeof x==='object'?x.id:x; return document.getElementById('player_'+id); }
+function showPlayerEffect(player, emoji, cls='', text='', duration=2000){
+  const el=playerEl(player); if(!el)return;
+  const badge=document.createElement('div'); badge.className='fxBadge '+cls; badge.textContent=emoji; el.appendChild(badge);
+  let txt=null; if(text){ txt=document.createElement('div'); txt.className='fxText'; txt.textContent=text; el.appendChild(txt); }
+  window.setTimeout(()=>{ try{badge.remove(); if(txt)txt.remove();}catch(e){} }, duration+250);
+}
+function showInspectEffect(target){ showPlayerEffect(target,'👁','eye','查驗中',2100); }
+function showSlashEffect(attacker,target){
+  showPlayerEffect(target,'⚔','slash','斬擊',1100);
+  const tEl=playerEl(target), aEl=playerEl(attacker);
+  if(tEl&&aEl){ const ar=aEl.getBoundingClientRect(), tr=tEl.getBoundingClientRect(); const x=(ar.left+ar.right+tr.left+tr.right)/4; const y=(ar.top+ar.bottom+tr.top+tr.bottom)/4; const d=document.createElement('div'); d.className='slashLine'; d.textContent='⚔'; d.style.left=x+'px'; d.style.top=y+'px'; document.body.appendChild(d); setTimeout(()=>{try{d.remove()}catch(e){}},1000); }
+}
+function showShieldReturnEffect(defender,attacker){ showPlayerEffect(defender,'🛡','shield','反彈！',1900); gameTimeout(()=>showPlayerEffect(attacker,'⚔','slash','刀回自己',1100),650); }
+function showHolyEffect(player){ showPlayerEffect(player,'✨','holy','聖光',2300); }
+function showClownEffect(actor,targets=null,text='哈哈哈，可能交換了'){ showPlayerEffect(actor,'🎭','clown',text,2400); (Array.isArray(targets)?targets:[targets]).filter(Boolean).forEach(t=>showPlayerEffect(t,'🎭','clown','被戲弄',2200)); }
+function showCrownEffect(player){ showPlayerEffect(player,'👑','crown','首腦現身',2400); }
+
+function resetGame(){ location.reload(); }
+
+function makeDeck(){ const deck=[]; for(const t of TYPES){ for(let n=1;n<=6;n++) deck.push({type:t,num:n,used:false,id:t+n+'-'+Math.random()}); } deck.push({type:'殉道者',num:0,used:false,id:'martyr'}); deck.push({type:'還施僧',num:0,used:false,id:'counter'}); deck.push({type:'首腦',num:0,used:false,id:'mastermind'}); return shuffle(deck); }
+function makeRoles(n){ const roles=[]; const m=Math.floor(n/2); for(let i=1;i<=m;i++){roles.push({faction:'蓮花',num:i});roles.push({faction:'仙鶴',num:i});} if(n%2===1)roles.push({faction:'浪人',num:0}); return shuffle(roles); }
+function startGame(n){
+  const humanSeat=Math.floor(Math.random()*n);
+  G={n,round:1,humanSeat,players:[],deck:makeDeck(),discard:[],honorBag:shuffle([...honorBase]),stage:'draft1',announceQueue:[],currentAnnounce:null,known:{},draftPass:[],logSecret:false,timerId:null,activeActorId:null,activeTargetIds:[],aiSpeed:DEFAULT_AI_SPEED,publicClaims:[],paused:false,pausedCallbacks:[],aiTalkRate:DEFAULT_AI_TALK_RATE};
+  const roles=makeRoles(n);
+  const names=shuffle([...AI_NAMES]).slice(0,n-1);
+  let aiIndex=0;
+  for(let i=0;i<n;i++){
+    const isHuman=i===humanSeat;
+    G.players.push({id:i,isHuman,isAI:!isHuman,name:isHuman?'玩家':names[aiIndex++],persona:isHuman?'玩家':AI_PERSONAS[Math.floor(Math.random()*AI_PERSONAS.length)],role:roles[i],alive:true,hand:[],draft:[],honors:[],revealed:false,infoLog:[],lastSpeech:'',manualMarks:{},memory:{roles:{},cards:{},claims:[]},aiDB:{rounds:[],trust:{},lies:0,trueTalk:0}});
+  }
+  for(const p of G.players){ p.draft=G.deck.splice(0,3); ensureAIDB(p); addInfo(p,`你的流派：${roleName(p.role)}`); if(p.isAI)addInfo(p,`AI獨立記憶庫：${aiDBCount(p)}/100局，不共享給其他AI。`); }
+  document.getElementById('setup').classList.add('hidden'); document.getElementById('game').classList.remove('hidden'); updatePauseUI();
+  log(`第 ${G.round} 局開始。玩家隨機坐在第 ${humanSeat+1} 號座位。AI姓名已隨機建立，榮譽會跟著人物移動。`,'info'); markProgress('開局'); startFlowWatchdog(); render(); beginDraft1(); showPrivate(humanSeat);
+}
+function clearActionMarkers(){ if(!G)return; G.activeActorId=null; G.activeTargetIds=[]; }
+function markAction(actor,targets=[]){
+  if(!G)return;
+  const aid=typeof actor==='object'?actor.id:actor;
+  const arr=Array.isArray(targets)?targets:[targets];
+  G.activeActorId=(aid===undefined||aid===null)?null:aid;
+  G.activeTargetIds=arr.filter(x=>x!==undefined&&x!==null).map(x=>typeof x==='object'?x.id:x);
+  render();
+}
+
+function render(){
+  document.getElementById('roundInfo').textContent=`第${G.round}局｜${G.n}人｜你的座位：${G.humanSeat+1}｜棄牌堆 ${G.discard.length} 張｜榮譽袋 ${G.honorBag.length} 枚`;
+  const box=document.getElementById('players'); box.innerHTML='';
+  for(const p of G.players){
+    const div=document.createElement('div'); const actionCls=(G.activeActorId===p.id?' actionUser':'')+((G.activeTargetIds||[]).includes(p.id)?' actionTarget':''); div.id='player_'+p.id; div.className='player '+(!p.alive?'dead ':'')+(p.isHuman?'human':'')+actionCls;
+    const roleShow = (p.isHuman||G.stage==='reveal'||p.revealed) ? `<span class="${roleClass(p.role)}">${roleName(p.role)}</span>` : '流派未公開';
+    const handShow = p.isHuman ? p.hand.map(c=>`<span class="miniCard ${c.used?'used':''}">${cardName(c)}</span>`).join('') : p.hand.map(c=>`<span class="miniCard ${c.used?'used':'faceDown'}">${c.used?cardName(c):'忍者牌'}</span>`).join('');
+    const human=G.players[G.humanSeat];
+    let known='';
+    if(p.isHuman){
+      known = `<div class="knownBox"><b>你的情報紀錄</b><br>${(p.infoLog||[]).slice(0,5).join('<br>')||'尚未查看任何情報'}</div>`;
+    }else if(human && human.memory){
+      const kr=human.memory.roles&&human.memory.roles[p.id];
+      const kc=human.memory.cards&&human.memory.cards[p.id];
+      const mm=getHumanMarks(p.id);
+      if(kr||kc||mm){
+        known = `<div class="knownBox"><b>你對此人的情報</b><br>${kr?`查驗流派：${roleName(kr)}`:''}${kr&&kc?'<br>':''}${kc?`查驗忍者牌：${cardName(kc)}`:''}${(kr||kc)&&mm?'<br>':''}${mm?mm:''}</div>`;
+      }
+    }
+    const speech = p.lastSpeech ? `<div class="speech">${p.lastSpeech}</div>` : '';
+    div.innerHTML=`<div class="pname">${p.name}<span class="badge ${p.alive?'aliveTag':'deadTag'}">${p.alive?'存活':'死亡'}</span>${p.isAI?'<span class="badge">AI</span><span class="badge">記憶 '+aiDBCount(p)+'/100</span>':'<span class="badge humanText">玩家</span>'}</div>
+      <div class="score">榮譽：${p.honors.length}枚 ${p.honors.map(x=>`<span class="honorToken">${(p.isHuman||G.stage==='gameover')?x:'?'}</span>`).join('')}</div>
+      <div class="roleFace">${roleShow}${p.isHuman?`<div class="small">${roleEffect(p.role)}</div>`:''}</div>
+      <div class="cards">${handShow}</div>${speech}${known}
+      <div class="controls">${p.isHuman?'<button class="secondary" onclick="showPrivate(G.humanSeat)">查看自己完整資訊</button><button class="secondary" onclick="openTalkModal()">使用對話框</button><button class="secondary" onclick="openMarkModal()">標記玩家</button>':''}</div>`;
+    box.appendChild(div);
+  }
+  renderPhaseList();
+}
+function renderPhaseList(){
+  const phases=['輪抽','密探','隱士','騙徒','盲眼刺客','上忍','揭示'];
+  const active = G.stage==='draft1'||G.stage==='draft2'?'輪抽':(G.currentAnnounce?G.currentAnnounce.type:(G.stage==='reveal'?'揭示':''));
+  document.getElementById('phaseList').innerHTML=phases.map(x=>`<span class="phasePill ${x===active?'active':''}">${x}</span>`).join('');
+}
+function showPrivate(pid){
+  const p=G.players[pid]; const pp=document.getElementById('privatePanel'); pp.classList.remove('hidden');
+  if(!p.isHuman){ pp.innerHTML=`<h3>AI私人資訊已隔離</h3><div class="resultBox">為避免作弊，AI的私人腦不提供玩家查看。</div>`; return; }
+  pp.innerHTML=`<div class="row" style="justify-content:space-between"><h3><span class="humanText">${p.name}｜你的完整資訊</span></h3><button class="secondary" onclick="document.getElementById('privatePanel').classList.add('hidden')">收起</button></div>
+  ${roleCardHTML(p.role)}
+  <div><b>你的忍者牌與效果：</b></div><div class="privateCards">${p.hand.map(c=>cardHTML(c,null)).join('')||'無'}</div>
+  <div style="margin-top:10px"><b>你的榮譽標記：</b>${p.honors.map(x=>`<span class="honorToken">${x}</span>`).join('')||'無'}</div>
+  <div class="knownBox" style="max-height:160px"><b>你查看到的資訊：</b><br>${(p.infoLog||[]).join('<br>')||'尚未查看任何情報'}</div><div class="talkHistory"><b>公開對話</b><br>${(G.publicClaims||[]).slice(0,8).map(c=>claimText(c)).join('<br>')||'尚無公開發言'}</div>`;
+}
+
+function chooseDraftIndex(p,cards){
+  let best=0, bv=-999;
+  cards.forEach((c,i)=>{ let v=cardBaseValue(c,p); if(c.type==='首腦')v+=p.role.faction==='浪人'?80:45; if(v>bv){bv=v;best=i;} });
+  return best;
+}
+function cardBaseValue(c,p){
+  if(!c)return 0; const map={上忍:90,盲眼刺客:75,隱士:65,密探:55,騙徒:50,還施僧:70,殉道者:35,首腦:75};
+  let v=map[c.type]||30; if(c.type==='騙徒')v+=({1:25,2:15,3:10,4:5,5:5,6:35}[c.num]||0); return v+Math.random()*12;
+}
+function isEnemy(self,role){ if(!role||self.role.faction==='浪人')return false; return role.faction!=='浪人' && role.faction!==self.role.faction; }
+function isFriend(self,role){ return role&&self.role.faction!=='浪人'&&role.faction===self.role.faction; }
+function knownRole(self,target){ return target.revealed?target.role:(self.memory&&self.memory.roles[target.id]); }
+function chooseInfoTargetAI(actor){
+  const candidates=G.players.filter(t=>t.id!==actor.id&&t.alive);
+  const unknown=candidates.filter(t=>!knownRole(actor,t));
+  return (unknown.length?unknown:candidates)[Math.floor(Math.random()*(unknown.length?unknown.length:candidates.length))];
+}
+function aiTrustWeight(actor, speakerId){
+  const db=ensureAIDB(actor);
+  if(!db||speakerId===undefined||speakerId===null)return 0.35;
+  const v=db.trust[speakerId];
+  if(v===undefined)return 0.35;
+  return Math.max(0.05, Math.min(0.85, v/100));
+}
+function claimInfluence(actor,target){
+  let v=0;
+  const claims=(G.publicClaims||[]).slice(0,20);
+  for(const c of claims){
+    const trust=aiTrustWeight(actor,c.by);
+    if(c.target===target.id){
+      if(c.type==='targetFaction'){
+        const fake={faction:c.faction,num:5};
+        if(isEnemy(actor,fake))v+=70*trust;
+        if(isFriend(actor,fake))v-=70*trust;
+        if(c.faction==='浪人')v-=12*trust;
+      }
+      if(c.type==='notTargetFaction'){
+        const fake={faction:c.faction,num:5};
+        if(isEnemy(actor,fake))v-=28*trust;
+        if(isFriend(actor,fake))v+=20*trust;
+      }
+      if(c.type==='targetNum')v+=(6-c.num)*8*trust;
+      if(c.type==='suspect')v+=45*trust;
+      if(c.type==='trust')v-=35*trust;
+      if(c.type==='mastermind')v+=26*trust;
+    }
+    if((c.type==='sameTeam'||c.type==='notSameTeam') && (c.a===target.id||c.b===target.id)){
+      const otherId=c.a===target.id?c.b:c.a;
+      const other=G.players[otherId];
+      const kr=other?knownRole(actor,other):null;
+      if(kr){
+        if(c.type==='sameTeam'){
+          if(isEnemy(actor,kr))v+=30*trust;
+          if(isFriend(actor,kr))v-=30*trust;
+        }else{
+          if(isEnemy(actor,kr))v-=18*trust;
+          if(isFriend(actor,kr))v+=18*trust;
+        }
+      }
+    }
+  }
+  return v;
+}
+function chooseKillTargetAI(actor,allowRandom=false){
+  const candidates=G.players.filter(t=>t.id!==actor.id&&t.alive);
+  let scored=candidates.map(t=>{
+    const r=knownRole(actor,t); let v=0;
+    if(isEnemy(actor,r))v+=220+(6-(r.num||5))*45;
+    if(isFriend(actor,r))v-=330;
+    if(r&&r.faction==='浪人')v-=35;
+    if(!r){ v+=claimInfluence(actor,t); }
+    else { v+=claimInfluence(actor,t)*0.25; }
+    v+=Math.random()*20; return {t,v};
+  }).sort((a,b)=>b.v-a.v);
+  if(scored[0]&&scored[0].v>80)return scored[0].t;
+  if(allowRandom&&Math.random()<0.35)return candidates[Math.floor(Math.random()*candidates.length)];
+  return null;
+}
+
+function cardValue(c){
+  if(!c)return 0;
+  if(c.type==='首腦')return 110;
+  if(c.type==='還施僧')return 100;
+  if(c.type==='上忍')return 92;
+  if(c.type==='盲眼刺客')return 84;
+  if(c.type==='騙徒')return ({1:76,2:72,3:62,4:44,5:54,6:86}[c.num]||50);
+  if(c.type==='隱士')return 68;
+  if(c.type==='密探')return 56;
+  if(c.type==='殉道者')return 45;
+  return 30;
+}
+function aiWantsActivate(p,a){
+  if(!p.alive)return false;
+  if(a.type==='密探'||a.type==='隱士'||a.type==='上忍')return true;
+  if(a.type==='盲眼刺客')return !!chooseKillTargetAI(p,false) || Math.random()<0.22;
+  if(a.type==='騙徒')return true;
+  return false;
+}
+function aiActivateCard(p){
+  markProgress(p.name+' aiActivateCard');
+  const a=G.currentAnnounce; const c=p.hand.find(x=>!x.used&&x.type===a.type&&x.num===a.num); if(!c){nextAnnounce();return;} c.used=true; markAction(p,[]); log(`${p.name} 翻開並發動 ${cardName(c)}。`,'ok'); showActionPopup(p,c,null,'翻開發動'); render(); resolveCardAI(p,c);
+}
+function resolveCardAI(p,c){
+  markProgress(p.name+' resolve '+cardName(c));
+  if(c.type==='密探'){ const t=chooseInfoTargetAI(p); markAction(p,t); showInspectEffect(t); rememberRole(p,t); showActionPopup(p,c,t,'偵查'); log(`${p.name} 使用密探查看 ${t.name}。結果只寫入該AI腦中。`); aiMaybeSpeakInfo(p,t); gameTimeout(nextAnnounce,aiDelay()); }
+  else if(c.type==='隱士'){ const t=chooseInfoTargetAI(p); markAction(p,t); showInspectEffect(t); const card=t.hand.find(x=>!x.used)||t.hand[0]; rememberRole(p,t); rememberCard(p,t,card); showActionPopup(p,c,t,'偵查流派與忍者牌'); log(`${p.name} 使用隱士查看 ${t.name}。結果只寫入該AI腦中。`); aiMaybeSpeakInfo(p,t); gameTimeout(nextAnnounce,aiDelay()); }
+  else if(c.type==='盲眼刺客'){ const t=chooseKillTargetAI(p,true); if(t)attemptKill(p,t,'盲眼刺客'); else {log(`${p.name} 沒有把握，盲眼刺客不出手。`); gameTimeout(nextAnnounce,aiDelay(.75));} }
+  else if(c.type==='上忍'){ const t=chooseInfoTargetAI(p); markAction(p,t); showInspectEffect(t); rememberRole(p,t); showActionPopup(p,c,t,'查看流派'); aiMaybeSpeakInfo(p,t); if(isEnemy(p,t.role))attemptKill(p,t,'上忍'); else {log(`${p.name} 使用上忍查看 ${t.name}，選擇不擊殺。`); gameTimeout(nextAnnounce,aiDelay());} }
+  else if(c.type==='騙徒')resolveTricksterAI(p,c);
+}
+function resolveTricksterAI(p,c){
+  if(c.num===1){ const a=chooseInfoTargetAI(p); rememberRole(p,a); let b=chooseInfoTargetAI(p); if(b&&b.id===a.id){ b=G.players.find(x=>x.id!==p.id&&x.id!==a.id&&x.alive)||b; } if(b)rememberRole(p,b); markAction(p,[a,b].filter(Boolean)); showTricksterPopup(p,c,[a,b].filter(Boolean),'百變者探查兩人；兩人的流派或許已被交換');
+    if(b && shouldAISwapRoles(p,a,b)){ swapRolesSecret(a.id,b.id,p.id); }
+    else log(`百變者效果結算：${p.name} 探查了 ${a.name}${b?'、'+b.name:''}，兩人的流派或許已被交換。`,'info');
+    gameTimeout(nextAnnounce,Math.max(3000,aiDelay())); }
+  else if(c.num===2){
+    const sample=G.discard.slice(-2);
+    if(sample.length){
+      let got=sample.sort((a,b)=>cardValue(b)-cardValue(a))[0];
+      const idx=G.discard.indexOf(got);
+      got=G.discard.splice(idx,1)[0];
+      const canNow=canImmediatePlay(got);
+      if(canNow && aiShouldImmediatePlay(p,got)){
+        got.used=true;
+        showTricksterPopup(p,c,null,`掘墓人取得 ${cardName(got)} 並立刻打出`); log(`${p.name} 使用掘墓人取得 ${cardName(got)}，並立刻打出。`,'ok');
+        resolveCardAI(p,got);
+        return;
+      } else {
+        p.hand.push(got);
+        addInfo(p,`掘墓人取得：${cardName(got)}`);
+        log(`${p.name} 使用掘墓人取得 ${cardName(got)}，保留到之後。`);
+      }
+    } else log(`${p.name} 使用掘墓人，但棄牌堆沒有可拿的牌。`);
+    gameTimeout(nextAnnounce,aiDelay());
+  }
+  else if(c.num===3){ const t=chooseInfoTargetAI(p); markAction(p,t); rememberRole(p,t); showTricksterPopup(p,c,t,'搗蛋鬼查看'); aiMaybeSpeakInfo(p,t); if(isEnemy(p,t.role)&&t.role.num<=2){t.revealed=true; publicRevealToAll(t); log(`${p.name} 使用搗蛋鬼公開揭示 ${t.name}。`);} else log(`${p.name} 使用搗蛋鬼查看 ${t.name}，不公開。`); render(); gameTimeout(nextAnnounce,aiDelay()); }
+  else if(c.num===4){ const t=chooseInfoTargetAI(p); markAction(p,t); rememberRole(p,t); showTricksterPopup(p,c,t,'靈魂商販查看'); log(`${p.name} 使用靈魂商販查看情報。`); gameTimeout(nextAnnounce,aiDelay()); }
+  else if(c.num===5){ const targets=G.players.filter(x=>x.id!==p.id&&x.honors.length); if(targets.length){ const t=targets[Math.floor(Math.random()*targets.length)]; markAction(p,t); p.revealed=true; p.honors.push(t.honors.pop()); showTricksterPopup(p,c,t,'竊賊偷取榮譽'); log(`${p.name} 使用竊賊偷取 ${t.name} 一枚榮譽。`);} else log(`${p.name} 的竊賊沒有目標。`); render(); gameTimeout(nextAnnounce,aiDelay()); }
+  else if(c.num===6){ p.revealed=true; const t=chooseKillTargetAI(p,true); render(); if(t)attemptKill(p,t,'裁判'); else {log(`${p.name} 使用裁判但沒有擊殺。`); gameTimeout(nextAnnounce,aiDelay());} }
+}
+
+function beginDraft1(){ G.stage='draft1'; setHost('輪抽階段','所有玩家查看3張忍者牌，先保留1張。',`<button onclick="draftPickPlayer(0)">開始玩家1選牌</button>`); render(); }
+function draftPickPlayer(pid){
+  const p=G.players[pid]; if(!p){ finishDraft1(); return; }
+  if(p.isAI){ const idx=chooseDraftIndex(p,p.draft); const picked=p.draft.splice(idx,1)[0]; p.hand.push(picked); G.draftPass[pid]=p.draft.splice(0); log(`${p.name} 已保留第一張牌。`); render(); gameTimeout(()=>draftPickPlayer(pid+1),aiDelay(.35)); return; }
+  showPickModal(`${p.name}：第一輪保留1張`, p.draft, idx=>{
+    const picked=p.draft.splice(idx,1)[0]; p.hand.push(picked); G.draftPass[pid]=p.draft.splice(0); addInfo(p,`第一輪保留：${cardName(picked)}`); log(`${p.name} 已保留第一張牌，其餘2張面朝下傳給左手邊。`); render(); showPrivate(G.humanSeat); draftPickPlayer(pid+1);
+  });
+}
+function finishDraft1(){
+  const pass=G.draftPass; for(let i=0;i<G.n;i++){ const left=(i+1)%G.n; G.players[left].draft=pass[i]; }
+  log('傳牌完成：每位玩家收到右手邊傳來的2張牌。主持人自動進入第二輪選牌。','info');
+  G.stage='draft2';
+  setHost('輪抽階段','第二輪：從收到的2張忍者牌保留1張，未選擇者進入棄牌堆。<br><span class="small">主持人自動開始，不需要再按開始第二輪。</span>','');
+  render();
+  gameTimeout(()=>draftPick2Player(0), 550);
+}
+function draftPick2Player(pid){
+  const p=G.players[pid]; if(!p){ finishDraft2(); return; }
+  if(p.isAI){ const idx=chooseDraftIndex(p,p.draft); const picked=p.draft.splice(idx,1)[0]; p.hand.push(picked); const disc=p.draft.splice(0)[0]; if(disc)G.discard.push(disc); log(`${p.name} 已保留第二張牌。`); render(); gameTimeout(()=>draftPick2Player(pid+1),aiDelay(.35)); return; }
+  showPickModal(`${p.name}：第二輪保留1張`, p.draft, idx=>{
+    const picked=p.draft.splice(idx,1)[0]; p.hand.push(picked); const disc=p.draft.splice(0)[0]; if(disc)G.discard.push(disc); addInfo(p,`第二輪保留：${cardName(picked)}`); log(`${p.name} 已保留第二張牌，1張牌進入棄牌堆。`); render(); showPrivate(G.humanSeat); draftPick2Player(pid+1);
+  });
+}
+function finishDraft2(){ log('輪抽結束。每位玩家持有2張忍者牌。','ok'); buildAnnounceQueue(); nextAnnounce(); }
+function buildAnnounceQueue(){ G.announceQueue=[]; for(const type of TYPES){ for(let n=1;n<=6;n++) G.announceQueue.push({type,num:n}); } }
+function nextAnnounce(){
+  markProgress('nextAnnounce');
+  clearAISafety();
+  if(G.timerId){ clearInterval(G.timerId); G.timerId=null; }
+  clearActionMarkers();
+  closeModal();
+  if(G.announceQueue.length===0){ beginReveal(); return; }
+  G.currentAnnounce=G.announceQueue.shift(); G.stage='action'; render();
+  const a=G.currentAnnounce;
+  setHost(announceCardLabel(a),`主持人宣告：<b>${announceCardLabel(a)}</b><br>效果：${announceCardEffect(a)}<br><span class="small">持有者可選擇是否翻面發動；若無持有者，倒數結束自動跳過。</span>`, `<button class="secondary" onclick="skipAnnounce()">手動跳過</button><button class="danger" onclick="forceNext('手動救援')">強制下一步</button>`);
+  log(`主持人宣告：<b>${announceCardLabel(a)}</b>｜效果：${announceCardEffect(a)}`,'info');
+  aiMaybeSpeakPhase(a);
+  startCountdown(2,()=>autoActivationCheck());
+}
+function startCountdown(sec, cb){
+  if(G.timerId){ clearInterval(G.timerId); G.timerId=null; }
+  let left=sec*10; const t=document.getElementById('timer');
+  t.textContent=`${(left/10).toFixed(1)} 秒`;
+  G.timerId=setInterval(()=>{ if(isGamePaused())return; left--; t.textContent=`${(left/10).toFixed(1)} 秒`; if(left<=0){clearInterval(G.timerId); G.timerId=null; t.textContent=''; cb&&cb();}},100);
+}
+function holdersForCurrent(){ const a=G.currentAnnounce; return G.players.filter(p=>p.alive && p.hand.some(c=>!c.used&&c.type===a.type&&c.num===a.num)); }
+function autoActivationCheck(){
+  markProgress('autoActivationCheck');
+  const holders=holdersForCurrent();
+  if(!holders.length){ aiMaybeSpeakSocial('empty'); skipAnnounce(true); return; }
+  openActivation();
+}
+function openActivation(){ const holders=holdersForCurrent(); if(!holders.length){ skipAnnounce(true); return; }
+  const a=G.currentAnnounce; const holder=holders[0];
+  if(holder.isAI){
+    if(aiWantsActivate(holder,a)){
+      setHost(`${a.type} ${a.num}`,`${holder.name} 正在判斷是否發動……`);
+      startAISafety(`${holder.name} ${a.type}${a.num}`);
+      gameTimeout(()=>{ try{ markProgress(holder.name+' AI執行'); clearAISafety(); aiActivateCard(holder); }catch(e){ console.error(e); log('⚠ '+holder.name+' AI執行錯誤，自動跳過。','warn'); clearAISafety(); nextAnnounce(); } },aiDelay());
+    } else {
+      log(`${holder.name} 持有 ${a.type}${a.num}，但AI判斷不發動。`);
+      aiMaybeSpeakSocial('refuse');
+      gameTimeout(nextAnnounce,aiDelay(.75));
+    }
+    return;
+  }
+  const sample={type:a.type,num:a.num};
+  const html=`<div class="modalTitle humanText">${cardName(sample)}</div><p>你持有 <b>${cardName(sample)}</b>。請選擇翻面發動或拒絕。</p><div class="resultBox">效果：${cardEffect(sample)}</div><div class="controls"><button class="good" onclick="activateCard(${holder.id})">翻面發動</button><button class="secondary" onclick="refuseActivation(${holder.id})">不發動</button></div>`;
+  modal(html);
+}
+function refuseActivation(pid){ const p=G.players[pid]; const a=G.currentAnnounce; closeModal(); addInfo(p,`你拒絕發動：${a.type}${a.num}`); log(`${p.name} 持有 ${a.type}${a.num}，選擇不發動。`); render(); showPrivate(G.humanSeat); nextAnnounce(); }
+function skipAnnounce(auto=false){
+  markProgress('skipAnnounce');
+  if(G.timerId){ clearInterval(G.timerId); G.timerId=null; document.getElementById('timer').textContent=''; }
+  const a=G.currentAnnounce; if(!a)return;
+  log(`${announceCardLabel(a)}：${auto?'無持有者，自動跳過。':'無人發動，跳過。'}`);
+  nextAnnounce();
+}
+function activateCard(pid){ closeModal(); const p=G.players[pid]; const a=G.currentAnnounce; const c=p.hand.find(x=>!x.used&&x.type===a.type&&x.num===a.num); if(!c)return; c.used=true; markAction(p,[]); addInfo(p,`你發動：${cardName(c)}`); log(`<b>${p.name}</b> 翻開並發動 <b>${cardName(c)}</b>`,'ok'); showActionPopup(p,c,null,'翻開發動'); render(); showPrivate(G.humanSeat); resolveCard(p,c); }
+
+function resolveCard(p,c){
+  if(c.type==='密探') chooseTarget(p,'密探：查看一位玩家流派', target=>{ markAction(p,target); showInspectEffect(target); showActionPopup(p,c,target,'偵查'); rememberRole(p,target); privateResult(p,`${target.name} 的流派是：<b class="${roleClass(target.role)}">${roleName(target.role)}</b>`); log(`${p.name} 使用密探查看 ${target.name}。結果不公開。`); render(); nextAnnounce(); });
+  else if(c.type==='隱士') chooseTarget(p,'隱士：查看一位玩家流派與一張忍者牌', target=>{ const card=target.hand.find(x=>!x.used)||target.hand[0]; markAction(p,target); showInspectEffect(target); showActionPopup(p,c,target,'偵查流派與忍者牌'); rememberRole(p,target); rememberCard(p,target,card); privateResult(p,`${target.name} 的流派是：<b class="${roleClass(target.role)}">${roleName(target.role)}</b><br>忍者牌：<b>${cardName(card)}</b>`); log(`${p.name} 使用隱士查看 ${target.name}。結果不公開。`); render(); nextAnnounce(); });
+  else if(c.type==='盲眼刺客') chooseKillTarget(p,'盲眼刺客：擊殺一位玩家', target=> attemptKill(p,target,'盲眼刺客'));
+  else if(c.type==='上忍') chooseTarget(p,'上忍：查看流派後可選擇擊殺', target=>{ showJoninChoice(p,target); });
+  else if(c.type==='騙徒') resolveTrickster(p,c);
+}
+function resolveTrickster(p,c){
+  const n=c.num;
+  if(n===1){ // 百變者：公開只說或許交換，不公開是否真的交換
+    chooseTwoTargets(p,'百變者：查看兩位玩家流派，可選擇交換', (a,b)=>{
+      showTricksterPopup(p,c,[a,b],'百變者探查兩人；兩人的流派或許已被交換'); privateResult(p,`${a.name}：<b class="${roleClass(a.role)}">${roleName(a.role)}</b><br>${b.name}：<b class="${roleClass(b.role)}">${roleName(b.role)}</b>`);
+      modal(`<div class="modalTitle">百變者</div><p>你查看了 ${a.name} 與 ${b.name} 的流派。是否交換？<br><span class="small">公開資訊只會說「兩人的流派或許已被交換」，不會公開你是否真的交換。</span></p><div class="controls"><button class="good" onclick="swapRolesSecret(${a.id},${b.id},${p.id});closeModal();nextAnnounce();">交換</button><button class="secondary" onclick="log('百變者效果結算：${p.name} 探查了 ${a.name}、${b.name}，兩人的流派或許已被交換。','info');closeModal();nextAnnounce();">不交換</button></div>`);
+      log(`${p.name} 使用百變者探查 ${a.name} 與 ${b.name}；兩人的流派或許已被交換。`,'info');
+    });
+  } else if(n===2){ // gravedigger
+    const sample=G.discard.slice(-2);
+    modal(`<div class="modalTitle">掘墓人</div><p>查看兩張棄牌，選一張加入手牌，或立刻打出。反制牌、首腦等特殊時機牌只能保留。</p><div class="draftGrid">${sample.map((x,i)=>{
+      const idx=G.discard.indexOf(x);
+      const immediate=canImmediatePlay(x)?`<button class="good" onclick="takeDiscard(${p.id},${idx},true)">立刻打出</button>`:`<button disabled>不可立刻打出</button>`;
+      return cardHTML(x,null,`<div class="controls"><button onclick="takeDiscard(${p.id},${idx},false)">加入手牌</button>${immediate}</div>`);
+    }).join('')||'<p>棄牌堆不足。</p>'}</div><div class="controls"><button class="secondary" onclick="closeModal();nextAnnounce();">跳過</button></div>`);
+    showTricksterPopup(p,c,null,'掘墓人查看棄牌'); log(`${p.name} 使用掘墓人查看棄牌。`);
+  } else if(n===3){ chooseTarget(p,'搗蛋鬼：查看一位玩家流派，可公開揭示', target=>{ showTricksterPopup(p,c,target,'搗蛋鬼查看'); privateResult(p,`${target.name} 的流派是：<b class="${roleClass(target.role)}">${roleName(target.role)}</b>`); modal(`<div class="modalTitle">搗蛋鬼</div><p>是否公開揭示 ${target.name} 的流派？</p><div class="controls"><button class="good" onclick="revealPlayer(${target.id});closeModal();nextAnnounce();">公開</button><button class="secondary" onclick="closeModal();nextAnnounce();">不公開</button></div>`); log(`${p.name} 使用搗蛋鬼查看 ${target.name}。`); });
+  } else if(n===4){ chooseTarget(p,'靈魂商販：查看對方一枚榮譽或流派，可交換榮譽', target=>{ showTricksterPopup(p,c,target,'靈魂商販查看'); privateResult(p,`${target.name} 流派：<b class="${roleClass(target.role)}">${roleName(target.role)}</b><br>${target.name} 榮譽：${target.honors.join('、')||'無'}`); log(`${p.name} 使用靈魂商販查看 ${target.name}。榮譽交換第一版簡化為手動資訊。`); nextAnnounce(); });
+  } else if(n===5){ chooseTarget(p,'竊賊：公開自己流派，偷一枚榮譽', target=>{ markAction(p,target); showTricksterPopup(p,c,target,'竊賊偷取'); p.revealed=true; if(target.honors.length){ p.honors.push(target.honors.pop()); log(`${p.name} 公開流派並偷取 ${target.name} 一枚榮譽。`,'ok'); } else log(`${p.name} 公開流派，但 ${target.name} 沒有榮譽可偷。`); render(); nextAnnounce(); });
+  } else if(n===6){ showTricksterPopup(p,c,null,'裁判公開流派'); p.revealed=true; render(); chooseKillTarget(p,'裁判：公開自己流派並擊殺一位玩家', target=> attemptKill(p,target,'裁判')); }
+}
+
+function shouldAISwapRoles(p,a,b){
+  const ar=a.role, br=b.role;
+  // 簡易AI：若能把敵方低號換到較不重要的位置，或把友方低號救走，就考慮交換。
+  let before=0, after=0;
+  const val=r=>!r||r.faction==='浪人'?0:(isFriend(p,r)?(7-r.num)*20:isEnemy(p,r)?-(7-r.num)*20:0);
+  before=val(ar)+val(br);
+  after=val(br)+val(ar);
+  if(p.role.faction==='浪人')return Math.random()<0.15;
+  // 交換本身對總和不變，因此加一點策略：讓已知敵方低號遠離原持有人時才偶爾換。
+  if(isEnemy(p,ar)&&ar.num<=2&&!isEnemy(p,br))return true;
+  if(isEnemy(p,br)&&br.num<=2&&!isEnemy(p,ar))return true;
+  return Math.random()<0.1;
+}
+function swapRoles(a,b,viewerId=null){ const A=G.players[a],B=G.players[b]; [A.role,B.role]=[B.role,A.role];
+  if(viewerId!==null && G.players[viewerId]){
+    const v=G.players[viewerId]; if(!v.memory)v.memory={roles:{},cards:{}};
+    v.memory.roles[A.id]=A.role; v.memory.roles[B.id]=B.role;
+    addInfo(v,`交換後：${A.name} 是 ${roleName(A.role)}，${B.name} 是 ${roleName(B.role)}`);
+  }
+  log(`${A.name} 與 ${B.name} 的流派牌被交換，身分牌跟著玩家一起移動。`,'warn'); render(); showPrivate(G.humanSeat); }
+function swapRolesSecret(a,b,viewerId=null){ const A=G.players[a],B=G.players[b]; [A.role,B.role]=[B.role,A.role];
+  if(viewerId!==null && G.players[viewerId]){
+    const v=G.players[viewerId]; ensureMemory(v);
+    v.memory.roles[A.id]=A.role; v.memory.roles[B.id]=B.role;
+    addInfo(v,`百變者交換後：${A.name} 是 ${roleName(A.role)}，${B.name} 是 ${roleName(B.role)}`);
+  }
+  log(`百變者效果結算：${A.name} 與 ${B.name} 的流派或許已被交換。`,'info'); render(); showPrivate(G.humanSeat); }
+function canImmediatePlay(c){ return !!c && ['密探','隱士','騙徒','盲眼刺客','上忍'].includes(c.type); }
+function aiShouldImmediatePlay(p,c){
+  if(!canImmediatePlay(c))return false;
+  if(c.type==='密探'||c.type==='隱士'||c.type==='上忍')return true;
+  if(c.type==='盲眼刺客')return !!chooseKillTargetAI(p,false) || Math.random()<0.18;
+  if(c.type==='騙徒')return c.num===1 || c.num===3 || c.num===6;
+  return false;
+}
+function takeDiscard(pid,idx,immediate=false){
+  const p=G.players[pid];
+  const c=G.discard.splice(idx,1)[0];
+  if(!c){ closeModal(); render(); nextAnnounce(); return; }
+  closeModal();
+  if(immediate && canImmediatePlay(c)){
+    c.used=true;
+    addInfo(p,`掘墓人取得並立刻打出：${cardName(c)}`);
+    log(`${p.name} 從棄牌堆取得 ${cardName(c)}，並立刻打出。`,'ok');
+    render(); showPrivate(G.humanSeat);
+    resolveCard(p,c);
+    return;
+  }
+  p.hand.push(c);
+  addInfo(p,`掘墓人取得並保留：${cardName(c)}`);
+  log(`${p.name} 從棄牌堆取得 ${cardName(c)}，加入手牌。`,'ok');
+  render(); showPrivate(G.humanSeat); nextAnnounce();
+}
+function revealPlayer(pid){ G.players[pid].revealed=true; publicRevealToAll(G.players[pid]); log(`${G.players[pid].name} 的流派被公開：${roleName(G.players[pid].role)}`,'warn'); render(); showPrivate(G.humanSeat); }
+function showHumanResultOnHost(html){
+  const banner=document.getElementById('humanResultBanner');
+  if(!banner)return;
+  banner.innerHTML=`<div class="hrTitle">🔎 你的查驗結果</div><div class="hrBody">${html}</div>`;
+  banner.classList.remove('hidden');
+  clearTimeout(window._humanResultTimer);
+  window._humanResultTimer=window.setTimeout(()=>{ banner.classList.add('hidden'); }, 9000);
+}
+function privateResult(p,html){ if(p.isHuman){ showHumanResultOnHost(html); const pp=document.getElementById('privatePanel'); pp.classList.remove('hidden'); pp.innerHTML=`<div class="row" style="justify-content:space-between"><h3><span class="humanText">${p.name} 私人結果</span></h3><button class="secondary" onclick="document.getElementById('privatePanel').classList.add('hidden')">收起</button></div><div class="resultBox">${html}</div><div class="knownBox"><b>情報紀錄</b><br>${(p.infoLog||[]).join('<br>')}</div>`; } }
+function showJoninChoice(p,target){ markAction(p,target); showInspectEffect(target); showActionPopup(p,'上忍',target,'查看流派'); rememberRole(p,target); privateResult(p,`${target.name} 的流派是：<b class="${roleClass(target.role)}">${roleName(target.role)}</b>`); render(); modal(`<div class="modalTitle">上忍決定</div><p>${p.name} 已查看 ${target.name} 的流派。是否擊殺？</p><div class="controls"><button class="danger" onclick="closeModal();attemptKill(G.players[${p.id}],G.players[${target.id}],'上忍')">擊殺</button><button class="secondary" onclick="closeModal();log('${p.name} 使用上忍後選擇不擊殺 ${target.name}。');nextAnnounce();">不擊殺</button></div>`); }
+function attemptKill(attacker,target,source){ markAction(attacker,target); if(!target.alive){ log(`${target.name} 已死亡，無法再次擊殺。`); nextAnnounce(); return; }
+  const counter=target.hand.find(c=>!c.used&&c.type==='還施僧');
+  const martyr=target.hand.find(c=>!c.used&&c.type==='殉道者');
+  if(source==='上忍'||source==='盲眼刺客'||source==='裁判'){
+    if(counter||martyr){
+      if(target.isAI){
+        setHost('反制判斷',`${target.name} 被 ${source} 擊殺，正在判斷是否發動反制……`);
+        startAISafety(`${target.name} 反制判斷`);
+        gameTimeout(()=>{ try{ markProgress(target.name+' 反制執行'); clearAISafety();
+          // AI擁有者自行決定：還施僧優先，殉道者其次；不把判斷交給其他AI。
+          if(counter && aiWantsCounter(target,attacker,source)) useCounter(target.id,attacker.id);
+          else if(martyr && aiWantsMartyr(target,attacker,source)) useMartyr(target.id);
+          else finalKill(attacker.id,target.id,source);
+        }catch(e){ console.error(e); log('⚠ 反制判斷錯誤，自動結算死亡。','warn'); clearAISafety(); finalKill(attacker.id,target.id,source); } }, aiDelay());
+      }else{
+        modal(`<div class="modalTitle humanText">反制機會：${target.name}</div><p>${target.name} 被 ${source} 擊殺。你是反制牌擁有者，可自行決定是否發動。</p><div class="controls">${counter?`<button class="danger" onclick="useCounter(${target.id},${attacker.id})">還施僧：反殺</button>`:''}${martyr?`<button class="good" onclick="useMartyr(${target.id})">殉道者：死亡並抽榮譽</button>`:''}<button class="secondary" onclick="closeModal();finalKill(${attacker.id},${target.id},'${source}')">不反制</button></div>`);
+      }
+      return;
+    }
+  }
+  finalKill(attacker.id,target.id,source);
+}
+function aiWantsCounter(target,attacker,source){ return true; }
+function aiWantsMartyr(target,attacker,source){ return target.honors.reduce((a,b)=>a+b,0)<10; }
+function useCounter(tid,aid){ const t=G.players[tid],a=G.players[aid]; if(!t||!t.alive){ log('反制者已死亡，還施僧無法發動。','warn'); closeModal(); gameTimeout(nextAnnounce,120); return; } if(!a||!a.alive){ log(`${a?a.name:'攻擊者'} 已死亡，還施僧沒有可反殺目標。`,'warn'); closeModal(); gameTimeout(nextAnnounce,120); return; } markAction(tid,aid); showShieldReturnEffect(t,a); const c=t.hand.find(x=>!x.used&&x.type==='還施僧'); if(c)c.used=true; closeModal(); a.alive=false; showActionPopup(t,'還施僧',a,'盾牌反彈，刀回自己'); log(`${t.name} 發動還施僧，反殺 ${a.name}！${t.name} 存活。`,'warn'); render(); showPrivate(G.humanSeat); nextAnnounce(); }
+function useMartyr(tid){ markAction(tid,tid); const t=G.players[tid]; showHolyEffect(t); const c=t.hand.find(x=>!x.used&&x.type==='殉道者'); if(c)c.used=true; t.alive=false; const h=drawHonor(); if(h)t.honors.push(h); closeModal(); showActionPopup(t,'殉道者',t,'聖光降臨，死亡並抽榮譽'); log(`${t.name} 發動殉道者，死亡但獲得1枚榮譽標記。`,'warn'); render(); showPrivate(G.humanSeat); nextAnnounce(); }
+function finalKill(aid,tid,source){ const a=G.players[aid],t=G.players[tid]; if(!t||!t.alive){ log(`${t?t.name:'目標'} 已死亡，${source} 無法再次擊殺，主持人自動跳過。`,'warn'); clearActionMarkers(); render(); gameTimeout(nextAnnounce,120); return; } if(!a||!a.alive){ log(`${a?a.name:'攻擊者'} 已死亡，${source} 無法執行，主持人自動跳過。`,'warn'); clearActionMarkers(); render(); gameTimeout(nextAnnounce,120); return; } markAction(aid,tid); showSlashEffect(a,t); t.alive=false; showActionPopup(a,source,t,'擊殺'); log(`${a.name} 使用 ${source} 擊殺 ${t.name}。`,'warn'); aiMaybeSpeakSocial('kill'); render(); showPrivate(G.humanSeat); nextAnnounce(); }
+function drawHonor(){ if(!G.honorBag.length) G.honorBag=shuffle([...honorBase]); return G.honorBag.pop(); }
+function chooseTarget(actor,title,cb){ const targets=G.players.filter(p=>p.id!==actor.id); modal(`<div class="modalTitle">${title}</div><p>${actor.name} 請選擇目標。</p><div class="targetList">${targets.map(t=>`<button class="targetBtn" onclick="targetCallback(${actor.id},${t.id})">${t.name}${t.alive?'':'（死亡）'}</button>`).join('')}</div>`); window._targetCB=cb; }
+function chooseKillTarget(actor,title,cb){ const targets=G.players.filter(p=>p.id!==actor.id && p.alive); if(!targets.length){ modal(`<div class="modalTitle">${title}</div><p>沒有可擊殺的存活目標。</p><div class="controls"><button class="secondary" onclick="closeModal();nextAnnounce();">確認</button></div>`); return; } modal(`<div class="modalTitle">${title}</div><p>${actor.name} 請選擇擊殺目標。<br><span class="small">死亡玩家不會出現在此列表，避免誤殺死亡者。</span></p><div class="targetList">${targets.map(t=>`<button class="targetBtn killTarget" onclick="targetCallback(${actor.id},${t.id})">${t.name}</button>`).join('')}</div>`); window._targetCB=cb; }
+function chooseTwoTargets(actor,title,cb){ const targets=G.players.filter(p=>p.id!==actor.id); let sel=[]; modal(`<div class="modalTitle">${title}</div><p>請選擇兩位玩家。<br><span class="small">已選目標會變成天藍色高亮框，選滿兩人後才能確認。</span></p><div id="twoTarget" class="targetList">${targets.map(t=>`<button id="twoBtn_${t.id}" class="targetBtn" onclick="pickTwo(${t.id})">${t.name}${t.alive?'':'（死亡）'}</button>`).join('')}</div><div id="twoHint" class="resultBox">尚未選擇。</div><div class="controls"><button id="twoOk" disabled onclick="finishTwo()">確認</button></div>`); window._twoSel=sel; window._twoActor=actor.id; window._twoCB=cb; }
+function refreshTwoSelection(){ const sel=window._twoSel||[]; document.querySelectorAll('#twoTarget .targetBtn').forEach(btn=>btn.classList.remove('selectedTarget')); sel.forEach(id=>{ const b=document.getElementById('twoBtn_'+id); if(b)b.classList.add('selectedTarget'); }); const ok=document.getElementById('twoOk'); if(ok)ok.disabled=sel.length!==2; const hint=document.getElementById('twoHint'); if(hint)hint.innerHTML=sel.length?('已選擇：'+sel.map(id=>G.players[id].name).join('、')):'尚未選擇。'; }
+function pickTwo(id){ if(!window._twoSel)window._twoSel=[]; if(window._twoSel.includes(id)) window._twoSel=window._twoSel.filter(x=>x!==id); else window._twoSel.push(id); if(window._twoSel.length>2) window._twoSel.shift(); refreshTwoSelection(); }
+function finishTwo(){ const [a,b]=window._twoSel.map(id=>G.players[id]); closeModal(); markAction(window._twoActor,[a.id,b.id]); window._twoCB(a,b); }
+function targetCallback(aid,tid){ const cb=window._targetCB; closeModal(); markAction(aid,tid); cb(G.players[tid]); }
+function modal(html){ document.getElementById('modalCard').innerHTML=html; document.getElementById('modal').classList.remove('hidden'); }
+function closeModal(){ const m=document.getElementById('modal'); if(m)m.classList.add('hidden'); }
+function showPickModal(title,cards,cb){ modal(`<div class="modalTitle">${title}</div><div class="draftGrid">${cards.map((c,i)=>cardHTML(c,i)).join('')}</div><div class="small">請只讓該玩家觀看。卡面已列出圖片、名稱與效果。</div>`); window._pickCB=cb; }
+function pickCard(i){ closeModal(); window._pickCB(i); }
+
+
+function ninjaGuessOptions(){
+  const opts=[];
+  for(const t of TYPES){ for(let n=1;n<=6;n++){ const c={type:t,num:n}; opts.push(`<option value="${cardName(c)}">${cardName(c)}</option>`); } }
+  for(const c of [{type:'殉道者',num:0},{type:'還施僧',num:0},{type:'首腦',num:0}]) opts.push(`<option value="${cardName(c)}">${cardName(c)}</option>`);
+  return opts.join('');
+}
+function getHumanMarks(pid){
+  const h=G&&G.players?G.players[G.humanSeat]:null; if(!h||!h.manualMarks)return '';
+  const m=h.manualMarks[pid]; if(!m)return '';
+  const arr=[];
+  if(m.faction)arr.push(`<span class="markBadge">標記陣營：${m.faction}</span>`);
+  if(m.num)arr.push(`<span class="markBadge">標記數字：${m.num}號</span>`);
+  if(m.ninja)arr.push(`<span class="markBadge">標記忍者：${m.ninja}</span>`);
+  if(m.note)arr.push(`<span class="markBadge">${m.note}</span>`);
+  return arr.join(' ');
+}
+function openMarkModal(){
+  if(!G)return;
+  setGamePaused(true,'標記玩家中，遊戲暫停'); document.getElementById('modal').classList.add('talkModal');
+  const human=G.players[G.humanSeat];
+  const fac=`<option value="">不標記</option><option>蓮花</option><option>仙鶴</option><option>浪人</option>`;
+  const nums=`<option value="">不標記</option>`+[1,2,3,4,5].map(n=>`<option value="${n}">${n}號</option>`).join('');
+  modal(`<div class="modalTitle humanText">玩家標記｜遊戲已暫停</div>
+    <div class="small">這是你自己的筆記，不會公開，AI也不會知道。</div>
+    <div class="talkSection">
+      <div class="selectLine">目標 <select id="markTarget">${playerOptions(human.id)}</select></div>
+      <div class="selectLine">標記陣營 <select id="markFaction">${fac}</select></div>
+      <div class="selectLine">標記數字 <select id="markNum">${nums}</select></div>
+      <div class="selectLine">標記忍者牌 <select id="markNinja"><option value="">不標記</option>${ninjaGuessOptions()}</select></div>
+    </div>
+    <div class="controls"><button class="good" onclick="saveManualMark()">儲存標記</button><button class="danger" onclick="clearManualMark()">清除該玩家標記</button><button class="secondary" onclick="closeTalkModal()">關閉並繼續</button></div>`);
+}
+function saveManualMark(){
+  const h=G.players[G.humanSeat]; if(!h.manualMarks)h.manualMarks={};
+  const tid=parseInt(document.getElementById('markTarget').value);
+  h.manualMarks[tid]={faction:document.getElementById('markFaction').value||'',num:document.getElementById('markNum').value||'',ninja:document.getElementById('markNinja').value||''};
+  addInfo(h,`你標記 ${G.players[tid].name}：${getHumanMarks(tid).replace(/<[^>]+>/g,' ')||'空白'}`);
+  closeTalkModal(); render(); showPrivate(G.humanSeat);
+}
+function clearManualMark(){
+  const h=G.players[G.humanSeat]; const tid=parseInt(document.getElementById('markTarget').value); if(h.manualMarks)delete h.manualMarks[tid]; closeTalkModal(); render(); showPrivate(G.humanSeat);
+}
+
+function claimText(c){
+  if(!c)return '';
+  const by=G.players[c.by]?.name||'玩家';
+  const p=id=>G.players[id]?.name||`玩家${id+1}`;
+  if(c.type==='selfFaction')return `${by}：我是${c.faction}`;
+  if(c.type==='notSelfFaction')return `${by}：我不是${c.faction}`;
+  if(c.type==='targetFaction')return `${by}：${p(c.target)}是${c.faction}`;
+  if(c.type==='notTargetFaction')return `${by}：${p(c.target)}不是${c.faction}`;
+  if(c.type==='targetNum')return `${by}：${p(c.target)}是${c.num}號`;
+  if(c.type==='notTargetNum')return `${by}：${p(c.target)}不是${c.num}號`;
+  if(c.type==='sameTeam')return `${by}：${p(c.a)}和${p(c.b)}肯定是一夥的`;
+  if(c.type==='notSameTeam')return `${by}：${p(c.a)}和${p(c.b)}不是一夥的`;
+  if(c.type==='trust')return `${by}：我比較相信${p(c.target)}`;
+  if(c.type==='suspect')return `${by}：我最懷疑${p(c.target)}`;
+  if(c.type==='mastermind')return `${by}：${p(c.target)}可能持有首腦`;
+  if(c.type==='mastermindDead')return `${by}：我覺得首腦可能已經死亡`;
+  if(c.type==='selfNinja')return `${by}：我有${c.card}`;
+  if(c.type==='notSelfNinja')return `${by}：我沒有${c.card}`;
+  if(c.type==='targetNinja')return `${by}：${p(c.target)}有${c.card}`;
+  if(c.type==='notTargetNinja')return `${by}：${p(c.target)}沒有${c.card}`;
+  return `${by}：發言`;
+}
+function addClaim(c){
+  if(!G)return;
+  G.publicClaims.unshift(c); G.publicClaims=G.publicClaims.slice(0,40);
+  for(const p of G.players){ ensureMemory(p); p.memory.claims.unshift(c); p.memory.claims=p.memory.claims.slice(0,30); }
+  const speaker=G.players[c.by]; if(speaker)speaker.lastSpeech=claimText(c).replace(`${speaker.name}：`,'');
+  log(`💬 ${claimText(c)}`,'info'); render(); if(G.players[G.humanSeat])showPrivate(G.humanSeat); aiReactToClaim(c);
+}
+function claimedRoleGuess(targetId){
+  if(!G||!G.publicClaims)return null;
+  for(const c of G.publicClaims){
+    if(c.target===targetId && c.type==='targetFaction') return {faction:c.faction,num:5};
+    if(c.target===targetId && c.type==='targetNum') return {faction:'未知',num:c.num};
+  }
+  return null;
+}
+function playerOptions(exceptId=null){ return G.players.filter(p=>p.id!==exceptId).map(p=>`<option value="${p.id}">${p.name}</option>`).join(''); }
+function talkTargetOptions(includeSelf=false){
+  const human=G.players[G.humanSeat];
+  return G.players.filter(p=>includeSelf||p.id!==human.id).map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+}
+function makeTalkPreview(){
+  const human=G.players[G.humanSeat];
+  const cat=document.getElementById('talkCat')?.value||'faction';
+  const mode=document.getElementById('talkMode')?.value||'';
+  const t1=parseInt(document.getElementById('talkT1')?.value||human.id);
+  const t2=parseInt(document.getElementById('talkT2')?.value||human.id);
+  const faction=document.getElementById('talkFaction')?.value||'蓮花';
+  const num=document.getElementById('talkNum')?.value||'1';
+  const ninja=document.getElementById('talkNinja')?.value||'上忍';
+  const p=id=>G.players[id]?.name||'某人';
+  let s='';
+  if(cat==='faction'){
+    if(mode==='self')s=`${human.name}：我是${faction}`;
+    if(mode==='notSelf')s=`${human.name}：我不是${faction}`;
+    if(mode==='target')s=`${human.name}：${p(t1)}是${faction}`;
+    if(mode==='notTarget')s=`${human.name}：${p(t1)}不是${faction}`;
+  }else if(cat==='number'){
+    s=`${human.name}：${p(t1)}${mode==='not'?'不是':'是'}${num}號`;
+  }else if(cat==='ninja'){
+    if(mode==='self')s=`${human.name}：我有${ninja}`;
+    if(mode==='notSelf')s=`${human.name}：我沒有${ninja}`;
+    if(mode==='target')s=`${human.name}：${p(t1)}有${ninja}`;
+    if(mode==='notTarget')s=`${human.name}：${p(t1)}沒有${ninja}`;
+  }else if(cat==='relation'){
+    s=`${human.name}：${p(t1)}和${p(t2)}${mode==='same'?'肯定是一夥的':'不是一夥的'}`;
+  }else if(cat==='trust'){
+    s=`${human.name}：我${mode==='trust'?'比較相信':'最懷疑'}${p(t1)}`;
+  }else if(cat==='mastermind'){
+    s=mode==='dead'?`${human.name}：我覺得首腦可能已經死亡`:`${human.name}：${p(t1)}可能持有首腦`;
+  }
+  const box=document.getElementById('talkPreview'); if(box)box.textContent=s;
+}
+function updateTalkBuilder(){
+  const cat=document.getElementById('talkCat')?.value||'faction';
+  const fac=`<option>蓮花</option><option>仙鶴</option><option>浪人</option>`;
+  const nums=[1,2,3,4,5].map(n=>`<option value="${n}">${n}號</option>`).join('');
+  const targets=talkTargetOptions(false);
+  const targetsAll=talkTargetOptions(true);
+  let h='';
+  if(cat==='faction') h=`<label>說法</label><select id="talkMode" onchange="makeTalkPreview()"><option value="self">我是</option><option value="notSelf">我不是</option><option value="target">他是</option><option value="notTarget">他不是</option></select><label>目標</label><select id="talkT1" onchange="makeTalkPreview()">${targets}</select><label>流派</label><select id="talkFaction" onchange="makeTalkPreview()">${fac}</select>`;
+  if(cat==='number') h=`<label>說法</label><select id="talkMode" onchange="makeTalkPreview()"><option value="is">他是</option><option value="not">他不是</option></select><label>目標</label><select id="talkT1" onchange="makeTalkPreview()">${targets}</select><label>數字</label><select id="talkNum" onchange="makeTalkPreview()">${nums}</select>`;
+  if(cat==='ninja') h=`<label>說法</label><select id="talkMode" onchange="makeTalkPreview()"><option value="self">我有</option><option value="notSelf">我沒有</option><option value="target">他有</option><option value="notTarget">他沒有</option></select><label>目標</label><select id="talkT1" onchange="makeTalkPreview()">${targets}</select><label>忍者牌</label><select id="talkNinja" onchange="makeTalkPreview()">${ninjaGuessOptions()}</select>`;
+  if(cat==='relation') h=`<label>關係</label><select id="talkMode" onchange="makeTalkPreview()"><option value="same">是一夥的</option><option value="notSame">不是一夥的</option></select><label>玩家A</label><select id="talkT1" onchange="makeTalkPreview()">${targetsAll}</select><label>玩家B</label><select id="talkT2" onchange="makeTalkPreview()">${targetsAll}</select>`;
+  if(cat==='trust') h=`<label>說法</label><select id="talkMode" onchange="makeTalkPreview()"><option value="trust">我相信</option><option value="suspect">我懷疑</option></select><label>目標</label><select id="talkT1" onchange="makeTalkPreview()">${targets}</select>`;
+  if(cat==='mastermind') h=`<label>說法</label><select id="talkMode" onchange="makeTalkPreview()"><option value="has">他可能有首腦</option><option value="dead">首腦可能已死亡</option></select><label>目標</label><select id="talkT1" onchange="makeTalkPreview()">${targets}</select>`;
+  const area=document.getElementById('talkBuilder'); if(area)area.innerHTML=h;
+  makeTalkPreview();
+}
+function submitUnifiedTalk(){
+  const human=G.players[G.humanSeat];
+  const cat=document.getElementById('talkCat')?.value||'faction';
+  const mode=document.getElementById('talkMode')?.value||'';
+  const t1=parseInt(document.getElementById('talkT1')?.value||human.id);
+  const t2=parseInt(document.getElementById('talkT2')?.value||human.id);
+  const faction=document.getElementById('talkFaction')?.value||'蓮花';
+  const num=parseInt(document.getElementById('talkNum')?.value||1);
+  const card=document.getElementById('talkNinja')?.value||'上忍';
+  let c={by:human.id,type:'selfFaction'};
+  if(cat==='faction'){
+    if(mode==='self')c={by:human.id,type:'selfFaction',faction};
+    if(mode==='notSelf')c={by:human.id,type:'notSelfFaction',faction};
+    if(mode==='target')c={by:human.id,type:'targetFaction',target:t1,faction};
+    if(mode==='notTarget')c={by:human.id,type:'notTargetFaction',target:t1,faction};
+  }else if(cat==='number') c={by:human.id,type:mode==='not'?'notTargetNum':'targetNum',target:t1,num};
+  else if(cat==='ninja'){
+    if(mode==='self')c={by:human.id,type:'selfNinja',card};
+    if(mode==='notSelf')c={by:human.id,type:'notSelfNinja',card};
+    if(mode==='target')c={by:human.id,type:'targetNinja',target:t1,card};
+    if(mode==='notTarget')c={by:human.id,type:'notTargetNinja',target:t1,card};
+  }else if(cat==='relation'){
+    if(t1===t2){ alert('兩個目標不能相同'); return; }
+    c={by:human.id,type:mode==='same'?'sameTeam':'notSameTeam',a:t1,b:t2};
+  }else if(cat==='trust') c={by:human.id,type:mode==='trust'?'trust':'suspect',target:t1};
+  else if(cat==='mastermind') c= mode==='dead'?{by:human.id,type:'mastermindDead'}:{by:human.id,type:'mastermind',target:t1};
+  addClaim(c); openTalkModal();
+}
+
+function htmlEscape(s){
+  return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function normalizeTalkText(s){
+  return String(s||'').trim().replace(/[，,。！!？?；;：:、]/g,' ').replace(/\s+/g,'');
+}
+function findPlayerInText(text, fallbackId=null){
+  if(!G||!G.players)return fallbackId;
+  let best=null, bestLen=0;
+  for(const p of G.players){
+    const names=[p.name,`玩家${p.id+1}`,`P${p.id+1}`,`${p.id+1}號玩家`].filter(Boolean);
+    for(const n of names){
+      if(n && text.includes(n) && n.length>bestLen){ best=p.id; bestLen=n.length; }
+    }
+  }
+  if(best!==null)return best;
+  if(/^(他|她|那個|這個|此人|對方)/.test(text) || text.includes('他是') || text.includes('他有') || text.includes('他不是') || text.includes('他沒有')) return fallbackId;
+  return fallbackId;
+}
+function findTwoPlayersInText(text){
+  if(!G||!G.players)return [];
+  const hits=[];
+  for(const p of G.players){
+    const names=[p.name,`玩家${p.id+1}`,`P${p.id+1}`,`${p.id+1}號玩家`].filter(Boolean);
+    if(names.some(n=>n&&text.includes(n))) hits.push(p.id);
+  }
+  return [...new Set(hits)].slice(0,2);
+}
+function parseFactionAndNum(text){
+  const out={};
+  const fm=text.match(/(蓮花|仙鶴|浪人)/);
+  if(fm)out.faction=fm[1];
+  const nm=text.match(/([1-5一二三四五])\s*號?/);
+  if(nm){
+    const map={'一':1,'二':2,'三':3,'四':4,'五':5};
+    out.num=map[nm[1]]||parseInt(nm[1]);
+  }
+  return out;
+}
+function parseNinjaCardText(text){
+  const special=['殉道者','還施僧','首腦'];
+  for(const s of special){ if(text.includes(s))return s; }
+  const trickNames={百變者:1,掘墓人:2,掘墓者:2,搗蛋鬼:3,靈魂商販:4,竊賊:5,裁判:6};
+  for(const [k,n] of Object.entries(trickNames)){ if(text.includes(k))return cardName({type:'騙徒',num:n}); }
+  const typeMatch=text.match(/(盲眼刺客|密探|隱士|上忍|騙徒)([1-6一二三四五六])?/);
+  if(typeMatch){
+    const type=typeMatch[1];
+    const map={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6};
+    const n=typeMatch[2] ? (map[typeMatch[2]]||parseInt(typeMatch[2])) : null;
+    if(type==='騙徒' && n)return cardName({type:'騙徒',num:n});
+    if(n)return cardName({type,num:n});
+    return type;
+  }
+  return null;
+}
+function isNegativeTalk(text){
+  return /不是|沒有|沒|無|不可能|不像/.test(text);
+}
+function applyHumanAutoMarkFromClaim(c){
+  if(!G)return;
+  const h=G.players[G.humanSeat]; if(!h||!h.manualMarks)return;
+  const setMark=(pid,key,val)=>{
+    if(pid===undefined||pid===null)return;
+    h.manualMarks[pid]=h.manualMarks[pid]||{};
+    h.manualMarks[pid][key]=val;
+  };
+  if(c.type==='targetFaction')setMark(c.target,'faction',c.faction);
+  if(c.type==='targetNum')setMark(c.target,'num',c.num);
+  if(c.type==='targetNinja')setMark(c.target,'ninja',c.card);
+  if(c.type==='notTargetFaction')setMark(c.target,'note',`不是${c.faction}`);
+  if(c.type==='notTargetNum')setMark(c.target,'note',`不是${c.num}號`);
+  if(c.type==='notTargetNinja')setMark(c.target,'note',`沒有${c.card}`);
+}
+function addParsedClaims(claims){
+  if(!claims||!claims.length)return false;
+  for(const c of claims){
+    applyHumanAutoMarkFromClaim(c);
+    addClaim(c);
+  }
+  return true;
+}
+function parseFreeTalkToClaims(raw){
+  const human=G.players[G.humanSeat];
+  const text=normalizeTalkText(raw);
+  const fallback=parseInt(document.getElementById('freeTalkTarget')?.value||human.id);
+  const claims=[];
+  if(!text)return {claims:[],message:'請先輸入發言。'};
+  if(/首腦.*(死|死亡|不在|沒了)/.test(text)){
+    claims.push({by:human.id,type:'mastermindDead'});
+    return {claims,message:'判斷：首腦可能已死亡'};
+  }
+  const two=findTwoPlayersInText(text);
+  if(two.length>=2 && /一夥|同夥|同隊|一隊/.test(text)){
+    claims.push({by:human.id,type:isNegativeTalk(text)?'notSameTeam':'sameTeam',a:two[0],b:two[1]});
+    return {claims,message:'判斷：兩人關係'};
+  }
+  const target=findPlayerInText(text,fallback);
+  if(/相信|信任/.test(text) && target!==null && target!==human.id){ claims.push({by:human.id,type:'trust',target}); return {claims,message:'判斷：信任目標'}; }
+  if(/懷疑|可疑|有問題|不相信/.test(text) && target!==null && target!==human.id){ claims.push({by:human.id,type:'suspect',target}); return {claims,message:'判斷：懷疑目標'}; }
+  const card=parseNinjaCardText(text);
+  if(card){
+    const self=/^我|我是|我有|我沒有|自己/.test(text);
+    const neg=isNegativeTalk(text);
+    if(self){
+      claims.push({by:human.id,type:neg?'notSelfNinja':'selfNinja',card});
+    }else{
+      claims.push({by:human.id,type:neg?'notTargetNinja':'targetNinja',target,card});
+    }
+    return {claims,message:`判斷：忍者牌 ${card}`};
+  }
+  if(/首腦/.test(text) && target!==null){
+    claims.push({by:human.id,type:'mastermind',target});
+    return {claims,message:'判斷：目標可能持有首腦'};
+  }
+  const rn=parseFactionAndNum(text);
+  if(rn.faction||rn.num){
+    const self=/^我|我是|我不|自己/.test(text);
+    const neg=isNegativeTalk(text);
+    if(rn.faction){
+      if(self)claims.push({by:human.id,type:neg?'notSelfFaction':'selfFaction',faction:rn.faction});
+      else claims.push({by:human.id,type:neg?'notTargetFaction':'targetFaction',target,faction:rn.faction});
+    }
+    if(rn.num){
+      claims.push({by:human.id,type:neg?'notTargetNum':'targetNum',target:self?human.id:target,num:rn.num});
+    }
+    return {claims,message:`判斷：${rn.faction||''}${rn.num?rn.num+'號':''}`};
+  }
+  return {claims:[],message:'AI暫時無法解析這句，可改成「他是蓮花1號」「飛燕有上忍3」「玄武和白狐是一夥的」。'};
+}
+function previewFreeTalk(){
+  const raw=document.getElementById('freeTalkInput')?.value||'';
+  const res=parseFreeTalkToClaims(raw);
+  const box=document.getElementById('freeTalkParse');
+  if(box)box.innerHTML=`${htmlEscape(res.message)}${res.claims.length?'<br>'+res.claims.map(c=>htmlEscape(claimText(c))).join('<br>'):''}`;
+}
+function submitFreeTalk(){
+  const raw=document.getElementById('freeTalkInput')?.value||'';
+  const res=parseFreeTalkToClaims(raw);
+  if(!res.claims.length){ alert(res.message); previewFreeTalk(); return; }
+  addParsedClaims(res.claims);
+  openTalkModal();
+}
+
+function openTalkModal(){
+  if(!G)return;
+  setGamePaused(true,'聊天欄開啟，遊戲暫停'); document.getElementById('modal').classList.add('talkModal');
+  modal(`<div class="modalTitle humanText">整合對話框｜遊戲已暫停</div>
+    <div class="small">可以用下方自由打字，系統會用關鍵字轉成AI看得懂的結構化發言。AI仍會判斷你可能說謊，不會直接全信。</div>
+    <div class="talkSection"><b>自由發言判斷</b>
+      <textarea id="freeTalkInput" class="freeTalkBox" oninput="previewFreeTalk()" placeholder="例：他是蓮花1號、飛燕有上忍3、玄武和白狐是一夥的、我不是仙鶴、首腦可能已死亡"></textarea>
+      <div class="selectLine"><label>「他」指的是</label><select id="freeTalkTarget" onchange="previewFreeTalk()">${talkTargetOptions(false)}</select><button class="good" onclick="submitFreeTalk()">送出自由發言</button></div>
+      <div class="freeTalkHint">可判斷：流派、數字、忍者牌、首腦、信任/懷疑、兩人同夥。若句子包含玩家名字會優先用名字，否則用「他」下拉選項。</div>
+      <div id="freeTalkParse" class="parseResult">等待輸入...</div>
+    </div>
+    <div class="talkSection"><b>發言器</b>
+      <div class="talkBuilder">
+        <label>主題</label><select id="talkCat" onchange="updateTalkBuilder()"><option value="faction">身分／流派</option><option value="number">數字</option><option value="ninja">忍者牌</option><option value="relation">兩人關係</option><option value="trust">信任／懷疑</option><option value="mastermind">首腦推測</option></select>
+      </div>
+      <div id="talkBuilder" class="talkBuilder"></div>
+      <div id="talkPreview" class="talkPreview">預覽</div>
+      <div class="controls"><button class="good" onclick="submitUnifiedTalk()">送出發言</button></div>
+    </div>
+    <div class="quickTalkGrid"><button class="secondary" onclick="quickRandomTalk('suspect')">快速：我懷疑某人</button><button class="secondary" onclick="quickRandomTalk('trust')">快速：我相信某人</button><button class="secondary" onclick="quickRandomTalk('mastermindDead')">快速：首腦可能已死亡</button></div>
+    <div class="talkHistory"><b>最近公開對話</b><br>${(G.publicClaims||[]).slice(0,14).map(claimText).join('<br>')||'尚無公開發言'}</div>
+    <div class="controls"><button id="pauseToggleBtnTalk" class="secondary" onclick="togglePause()">⏸ 暫停</button><button class="secondary" onclick="closeTalkModal()">關閉並繼續遊戲</button></div>`);
+  setTimeout(updateTalkBuilder,20);
+}
+function quickRandomTalk(kind){
+  const h=G.players[G.humanSeat]; const candidates=G.players.filter(p=>p.id!==h.id); const t=candidates[Math.floor(Math.random()*candidates.length)];
+  if(kind==='suspect'&&t)addClaim({by:h.id,type:'suspect',target:t.id});
+  if(kind==='trust'&&t)addClaim({by:h.id,type:'trust',target:t.id});
+  if(kind==='mastermindDead')addClaim({by:h.id,type:'mastermindDead'});
+  openTalkModal();
+}
+function submitTalk(type){ submitUnifiedTalk(); }
+function closeTalkModal(){
+  closeModal(); document.getElementById('modal').classList.remove('talkModal');
+  if(G){ setGamePaused(false); }
+}
+function aiSpeak(p,c){ if(!p||!p.isAI)return; addClaim(Object.assign({by:p.id, aiGenerated:true},c)); }
+function aiReactToClaim(c){
+  if(!G||!c||c.aiGenerated)return;
+  const speaker=G.players[c.by];
+  if(!speaker)return;
+  // 精簡AI：不再亂聊；只在有人發言後，根據可信度與私人情報表達信任或懷疑。
+  const ais=G.players.filter(p=>p.isAI&&p.alive&&p.id!==c.by);
+  if(!ais.length)return;
+  // 一句話最多觸發1名AI反應，避免洗版。
+  const candidates=ais.filter(p=>Math.random()<Math.min(0.65, personaRate(p)*0.55));
+  const p=(candidates[0]||ais[Math.floor(Math.random()*ais.length)]);
+  if(!p || Math.random()>0.42)return;
+  const db=ensureAIDB(p);
+  const trust=(db.trust&&db.trust[c.by]!==undefined)?db.trust[c.by]:50;
+  let suspicion=50-trust;
+  // 如果AI私下查到這句話是假的，提高懷疑；查到是真的，提高信任。
+  const mem=ensureMemory(p);
+  function knownTargetRole(id){ return mem.roles&&mem.roles[id]; }
+  if(c.type==='targetFaction' && knownTargetRole(c.target)) suspicion += (knownTargetRole(c.target).faction===c.faction)?-24:28;
+  if(c.type==='notTargetFaction' && knownTargetRole(c.target)) suspicion += (knownTargetRole(c.target).faction!==c.faction)?-14:20;
+  if(c.type==='targetNum' && knownTargetRole(c.target)) suspicion += (knownTargetRole(c.target).num===c.num)?-18:22;
+  if(c.type==='notTargetNum' && knownTargetRole(c.target)) suspicion += (knownTargetRole(c.target).num!==c.num)?-10:16;
+  if(c.type==='selfFaction') suspicion += (speaker.role&&speaker.role.faction===c.faction)?-8:10; // AI不可直接驗證別人自稱，僅微調
+  const targetForComment = (c.type==='targetFaction'||c.type==='notTargetFaction'||c.type==='targetNum'||c.type==='notTargetNum'||c.type==='targetNinja'||c.type==='notTargetNinja'||c.type==='mastermind') ? c.target : c.by;
+  if(suspicion>=58){ aiSpeak(p,{type:'suspect',target:c.by}); }
+  else if(suspicion<=30){ aiSpeak(p,{type:'trust',target:c.by}); }
+  else if(targetForComment!==undefined && Math.random()<0.30){
+    // 中立時只針對發言內容中的目標提醒懷疑，仍然只說信任/懷疑類。
+    aiSpeak(p,{type:Math.random()<0.55?'suspect':'trust',target:targetForComment});
+  }
+}
+function aiMaybeSpeakInfo(p,target){ return; /* v2.2：AI不再隨機廢話，只在玩家/AI公開發言後表達信任或懷疑。 */ }
+
+function aiMaybeSpeakPhase(a){ return; /* v2.2：AI不再隨機廢話，只在玩家/AI公開發言後表達信任或懷疑。 */ }
+
+function aiMaybeSpeakSocial(trigger=null){ return; /* v2.2：AI不再隨機廢話，只在玩家/AI公開發言後表達信任或懷疑。 */ }
+
+
+
+function cloneRoleForDB(r){ return r?{faction:r.faction,num:r.num}:null; }
+function summarizeRoundForAI(p,winnerIds,text){
+  const mem=ensureMemory(p);
+  const db=ensureAIDB(p);
+  const seenRoles={};
+  for(const [id,r] of Object.entries(mem.roles||{})) seenRoles[id]=cloneRoleForDB(r);
+  const seenCards={};
+  for(const [id,c] of Object.entries(mem.cards||{})) seenCards[id]=c?cardName(c):'未知';
+  const summary={
+    round:G.round,
+    selfName:p.name,
+    selfRole:cloneRoleForDB(p.role),
+    selfHand:p.hand.map(cardName),
+    aliveAtReveal:p.alive,
+    winners:[...winnerIds],
+    won:winnerIds.includes(p.id),
+    publicTalk:(G.publicClaims||[]).slice(0,20).map(c=>({text:claimText(c),raw:c})),
+    privateSeenRoles:seenRoles,
+    privateSeenCards:seenCards,
+    resultText:text
+  };
+  db.rounds.unshift(summary);
+  db.rounds=db.rounds.slice(0,AI_DB_LIMIT);
+  updateTrustFromRound(p, winnerIds);
+  addInfo(p,`AI記憶庫更新：第${G.round}局，${summary.won?'本局獲勝':'本局未勝'}，目前${db.rounds.length}/100局。`);
+}
+function updateTrustFromRound(p,winnerIds){
+  const db=ensureAIDB(p);
+  const claims=(G.publicClaims||[]).slice(0,40);
+  for(const c of claims){
+    if(c.by===p.id)continue;
+    if(db.trust[c.by]===undefined)db.trust[c.by]=50;
+    let delta=0;
+    const speaker=G.players[c.by];
+    if(!speaker)continue;
+    const sr=speaker.role;
+    if(c.type==='selfFaction') delta += (sr.faction===c.faction)?8:-10;
+    if(c.type==='notSelfFaction') delta += (sr.faction!==c.faction)?5:-7;
+    if(c.type==='targetFaction'&&G.players[c.target]) delta += (G.players[c.target].role.faction===c.faction)?7:-9;
+    if(c.type==='notTargetFaction'&&G.players[c.target]) delta += (G.players[c.target].role.faction!==c.faction)?5:-7;
+    if(c.type==='targetNum'&&G.players[c.target]) delta += (G.players[c.target].role.num===c.num)?6:-6;
+    if(c.type==='notTargetNum'&&G.players[c.target]) delta += (G.players[c.target].role.num!==c.num)?4:-5;
+    if(c.type==='selfNinja') delta += (speaker.hand.some(x=>cardName(x)===c.card))?5:-6;
+    if(c.type==='notSelfNinja') delta += (!speaker.hand.some(x=>cardName(x)===c.card))?3:-4;
+    if(c.type==='targetNinja'&&G.players[c.target]) delta += (G.players[c.target].hand.some(x=>cardName(x)===c.card))?5:-6;
+    if(c.type==='notTargetNinja'&&G.players[c.target]) delta += (!G.players[c.target].hand.some(x=>cardName(x)===c.card))?3:-4;
+    if(c.type==='sameTeam'&&G.players[c.a]&&G.players[c.b]) delta += (G.players[c.a].role.faction===G.players[c.b].role.faction)?6:-8;
+    if(c.type==='notSameTeam'&&G.players[c.a]&&G.players[c.b]) delta += (G.players[c.a].role.faction!==G.players[c.b].role.faction)?6:-8;
+    if(c.type==='suspect'&&G.players[c.target]){
+      const tr=G.players[c.target].role;
+      if(sr.faction!=='浪人'&&tr.faction!==sr.faction&&tr.faction!=='浪人')delta+=4; else delta-=3;
+    }
+    db.trust[c.by]=Math.max(5,Math.min(95,db.trust[c.by]+delta));
+  }
+}
+function storeRoundDatabases(winners,text){
+  const ids=winners.map(p=>p.id);
+  for(const p of G.players){ if(p.isAI) summarizeRoundForAI(p,ids,text); }
+  log(`AI獨立記憶庫已更新：每名AI只記錄自己的查驗、手牌、公開發言與本局結果；不共享私人情報。`,'info');
+}
+function clearAIDatabases(){
+  if(!G)return;
+  for(const p of G.players){ if(p.isAI)p.aiDB={rounds:[],trust:{},lies:0,trueTalk:0}; }
+  log('10分遊戲結束：所有AI的100局記憶庫已刷新。','warn');
+}
+function beginReveal(){ G.stage='reveal'; G.currentAnnounce=null; render(); setHost('揭示階段','所有玩家翻開流派，判定首腦與勝負。',`<button onclick="resolveReveal()">開始揭示判定</button>`); log('進入揭示階段。','info'); }
+function resolveReveal(){
+  G.players.forEach(p=>p.revealed=true); render();
+  const alive=G.players.filter(p=>p.alive);
+  const aliveMaster=alive.filter(p=>p.hand.some(c=>c.type==='首腦'));
+  let winners=[]; let text='';
+  const roninMaster=aliveMaster.find(p=>p.role.faction==='浪人');
+  if(roninMaster){ winners=[roninMaster]; text=`浪人 ${roninMaster.name} 持有首腦且存活，成為唯一勝利者！`; }
+  else if(aliveMaster.length){
+    const m=aliveMaster[0]; const faction=m.role.faction; winners=alive.filter(p=>p.role.faction===faction); text=`${m.name} 持有首腦且存活，${faction}派直接獲勝！`;
+    winners.push(...alive.filter(p=>p.role.faction==='浪人'));
+  } else {
+    const lotus=alive.filter(p=>p.role.faction==='蓮花').sort((a,b)=>a.role.num-b.role.num);
+    const crane=alive.filter(p=>p.role.faction==='仙鶴').sort((a,b)=>a.role.num-b.role.num);
+    const cmp=compareFaction(lotus,crane);
+    if(cmp>0){ winners=lotus; text='蓮花派以存活數字較小獲勝！'; }
+    else if(cmp<0){ winners=crane; text='仙鶴派以存活數字較小獲勝！'; }
+    else { winners=alive.filter(p=>p.role.faction!=='浪人'); text='兩派完全相同，所有存活的兩派玩家獲勝！'; }
+    winners.push(...alive.filter(p=>p.role.faction==='浪人'));
+  }
+  winners=[...new Map(winners.map(p=>[p.id,p])).values()];
+  storeRoundDatabases(winners,text);
+  for(const p of winners){ const h=drawHonor(); p.honors.push(h); }
+  const honorText=winners.map(p=>`${p.name} 抽取1枚榮譽標記`).join('、')||'無人抽取榮譽';
+  log(`<b>${text}</b><br>${honorText}`,'ok');
+  const max=Math.max(...G.players.map(p=>p.honors.reduce((a,b)=>a+b,0)));
+  if(max>=10){ G.stage='gameover'; render(); const champs=G.players.filter(p=>p.honors.reduce((a,b)=>a+b,0)===max); setHost('遊戲結束',`<span class="winner">${champs.map(p=>p.name).join('、')} 以 ${max} 分獲勝！</span>`,`<button onclick="resetGame()">重新開始</button>`); log(`有人達到10分，遊戲結束。最高分：${max}`,'ok'); clearAIDatabases(); render(); }
+  else { render(); setHost('本局結束',`${text}<br><span class="small">勝利者已抽取榮譽，分數加入各自私人資訊。</span>`,`<button onclick="nextRound()">開始新一局</button><button id="pauseToggleBtnTop" class="secondary" onclick="togglePause()">⏸ 暫停</button><button class="secondary" onclick="resetGame()">重新開始</button>`); }
+}
+function compareFaction(a,b){
+  const len=Math.max(a.length,b.length);
+  for(let i=0;i<len;i++){
+    if(!a[i]&&!b[i])return 0; if(!a[i])return -1; if(!b[i])return 1;
+    if(a[i].role.num<b[i].role.num)return 1; if(a[i].role.num>b[i].role.num)return -1;
+  } return 0;
+}
+function nextRound(){
+  const n=G.n;
+  const roles=makeRoles(n);
+  G.round++;
+  G.deck=makeDeck(); G.discard=[]; G.stage='draft1'; G.paused=false; G.pausedCallbacks=[]; G.aiTalkRate=DEFAULT_AI_TALK_RATE; G.currentAnnounce=null; G.announceQueue=[]; G.activeActorId=null; G.activeTargetIds=[]; G.draftPass=[]; G.publicClaims=[];
+  // 重新隨機入座，但人物本身、姓名、榮譽標記都跟著同一個人移動。
+  G.players=shuffle(G.players);
+  for(let i=0;i<n;i++){
+    const p=G.players[i];
+    p.id=i;
+    p.isAI=!p.isHuman;
+    p.role=roles[i];
+    p.alive=true;
+    p.hand=[];
+    p.draft=G.deck.splice(0,3);
+    p.revealed=false;
+    p.infoLog=[];
+    p.lastSpeech='';
+    p.memory={roles:{},cards:{},claims:[]};
+    p.manualMarks={};
+    ensureAIDB(p);
+    addInfo(p,`你的流派：${roleName(p.role)}`);
+    if(p.isAI) addInfo(p,`AI獨立記憶庫：${aiDBCount(p)}/100局，不共享給其他AI。`);
+  }
+  G.humanSeat=G.players.findIndex(p=>p.isHuman);
+  log(`第 ${G.round} 局開始。所有人物重新隨機入座；${G.players[G.humanSeat].name} 目前在第 ${G.humanSeat+1} 號座位。榮譽標記跟著人物保留。`,'info');
+  render(); beginDraft1(); showPrivate(G.humanSeat);
+}
+</script>
+</body>
+</html>
